@@ -1,0 +1,351 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    📊 INSTRUCCIONES - DASHBOARD STREAMLIT                    
+                          Análisis Capacidad Académica UABC                   
+═══════════════════════════════════════════════════════════════════════════════
+
+🎯 ESTE DASHBOARD TE PERMITIRÁ:
+
+✓ Visualizar toda tu data de UABC de forma interactiva
+✓ Crear gráficas dinámicas con zoom, hover, y descarga
+✓ Realizar análisis descriptivos, inferenciales y predictivos
+✓ Comparar unidades académicas
+✓ Exportar datos y visualizaciones
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 PREREQUISITOS:
+
+1. ✓ Python 3.8 o superior instalado
+2. ✓ Datos descargados en la carpeta downloads/raw/
+3. ✓ Navegador web (Chrome, Firefox, Edge, Safari)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 INSTALACIÓN RÁPIDA (3 PASOS):
+
+PASO 1: Instalar dependencias
+─────────────────────────────
+
+Abre tu terminal/PowerShell en la carpeta del proyecto y ejecuta:
+
+```bash
+pip install -r requirements_streamlit.txt
+```
+
+Esto instalará:
+- streamlit (framework del dashboard)
+- pandas (manipulación de datos)
+- plotly (gráficas interactivas)
+- scipy, sklearn (análisis estadístico)
+
+
+PASO 2: Verificar instalación
+──────────────────────────────
+
+Ejecuta este comando para verificar que streamlit se instaló correctamente:
+
+```bash
+streamlit --version
+```
+
+Deberías ver algo como:
+Streamlit, version 1.29.0
+
+
+PASO 3: Ejecutar el dashboard
+──────────────────────────────
+
+```bash
+streamlit run dashboard_uabc.py
+```
+
+¡Listo! El dashboard se abrirá automáticamente en tu navegador.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📁 ESTRUCTURA DE ARCHIVOS NECESARIA:
+
+Tu carpeta debe verse así:
+
+proyecto_uabc/
+│
+├── dashboard_uabc.py              ← Archivo principal del dashboard
+├── requirements_streamlit.txt     ← Dependencias
+│
+└── downloads/
+    └── raw/
+        ├── Alumnos_Licenciatura_Historico_TIMESTAMP.xls
+        ├── Alumnos_Posgrado_Historico_TIMESTAMP.xls
+        ├── Personal_Academico_Historico_TIMESTAMP.xls
+        ├── Personal_SNI_Historico_TIMESTAMP.xls
+        ├── Cuerpos_Academicos_Historico_TIMESTAMP.xls
+        ├── Programas_Licenciatura_Historico_TIMESTAMP.xls
+        ├── Programas_Posgrado_Historico_TIMESTAMP.xls
+        └── Relacion_AlumnosProfesor_UnidadAcademica_TIMESTAMP.xls
+
+IMPORTANTE: El dashboard busca automáticamente los archivos en downloads/raw/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎨 SECCIONES DEL DASHBOARD:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 🏠 INICIO                                                                   │
+│                                                                             │
+│ - Resumen ejecutivo del proyecto                                           │
+│ - Métricas clave actuales                                                  │
+│ - Hipótesis a probar                                                       │
+│ - Objetivos del análisis                                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 📈 ANÁLISIS DESCRIPTIVO                                                    │
+│                                                                             │
+│ Tab 1: Matrícula                                                            │
+│   - Evolución licenciatura 2018-2024                                       │
+│   - Evolución posgrado 2018-2024                                           │
+│   - Gráficas de líneas interactivas                                        │
+│                                                                             │
+│ Tab 2: Personal Académico                                                   │
+│   - Evolución de planta docente                                            │
+│   - Tasas de crecimiento                                                   │
+│   - Análisis de tendencias                                                 │
+│                                                                             │
+│ Tab 3: Programas Educativos                                                 │
+│   - Evolución programas licenciatura                                       │
+│   - Evolución programas posgrado                                           │
+│   - Gráficas de barras                                                     │
+│                                                                             │
+│ Tab 4: Investigación                                                        │
+│   - Personal SNI histórico                                                 │
+│   - Cuerpos académicos (consolidados, en consolidación, en formación)      │
+│   - Gráficas de áreas apiladas                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 🔍 ANÁLISIS INFERENCIAL                                                    │
+│                                                                             │
+│ - Correlación matrícula vs personal académico (H1)                         │
+│ - Correlación SNI vs programas posgrado (H2)                               │
+│ - Análisis ratio alumnos-profesor por área (H4)                            │
+│ - Pruebas estadísticas                                                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 🔮 ANÁLISIS PREDICTIVO                                                     │
+│                                                                             │
+│ - Proyecciones matrícula 2025-2030                                         │
+│ - Personal académico necesario                                              │
+│ - Parámetros ajustables (tasas de crecimiento, ratios objetivo)           │
+│ - Visualización de escenarios                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 📊 COMPARATIVA POR UNIDAD                                                  │
+│                                                                             │
+│ - Ratio alumnos-profesor por unidad académica                              │
+│ - Identificación de unidades con sobrecarga                                │
+│ - Gráficas de barras horizontales                                          │
+│ - Benchmarking entre campus                                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 📁 DATOS CRUDOS                                                            │
+│                                                                             │
+│ - Exploración de todos los datasets                                        │
+│ - Tablas interactivas                                                      │
+│ - Descarga en formato CSV                                                  │
+│ - Estadísticas descriptivas                                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 FUNCIONALIDADES INTERACTIVAS:
+
+📊 Gráficas Plotly (interactivas):
+  - Zoom: Click y arrastra
+  - Pan: Shift + click y arrastra
+  - Hover: Pasa el mouse sobre los puntos
+  - Descarga: Click en icono cámara (PNG)
+  - Reset: Doble click en la gráfica
+
+📥 Descargas:
+  - CSV: Descarga tablas de datos
+  - PNG: Descarga gráficas como imágenes
+  - Configurable desde el botón de descarga
+
+🔄 Actualización automática:
+  - Los datos se cargan automáticamente
+  - Cache para mejor rendimiento
+  - Recarga automática si cambias los archivos
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚙️ CONFIGURACIÓN AVANZADA:
+
+Cambiar puerto (si 8501 está ocupado):
+```bash
+streamlit run dashboard_uabc.py --server.port 8502
+```
+
+Ejecutar en modo desarrollo (auto-reload):
+```bash
+streamlit run dashboard_uabc.py --server.runOnSave true
+```
+
+Abrir en navegador específico:
+```bash
+streamlit run dashboard_uabc.py --browser.gatherUsageStats false
+```
+
+Modo headless (sin abrir navegador):
+```bash
+streamlit run dashboard_uabc.py --server.headless true
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🐛 SOLUCIÓN DE PROBLEMAS:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PROBLEMA: ModuleNotFoundError: No module named 'streamlit'                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+SOLUCIÓN:
+```bash
+pip install streamlit
+```
+
+O instala todas las dependencias:
+```bash
+pip install -r requirements_streamlit.txt
+```
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PROBLEMA: No se muestran datos en el dashboard                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+SOLUCIÓN:
+1. Verifica que los archivos .xls estén en downloads/raw/
+2. Verifica que tengan el formato correcto de nombre
+3. Abre un archivo en Excel para verificar que contiene datos
+4. Revisa la consola del dashboard para mensajes de error
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PROBLEMA: El puerto 8501 está en uso                                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+SOLUCIÓN:
+```bash
+streamlit run dashboard_uabc.py --server.port 8502
+```
+
+O mata el proceso en 8501:
+Windows: netstat -ano | findstr :8501
+Linux/Mac: lsof -ti:8501 | xargs kill
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PROBLEMA: Gráficas no se muestran correctamente                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+SOLUCIÓN:
+1. Actualiza tu navegador
+2. Limpia cache: Ctrl+Shift+R (Windows) o Cmd+Shift+R (Mac)
+3. Prueba en modo incógnito
+4. Reinstala plotly: pip install --upgrade plotly
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PROBLEMA: Error al leer archivos Excel                                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+SOLUCIÓN:
+```bash
+pip install --upgrade openpyxl pandas
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 PERSONALIZACIÓN:
+
+El dashboard está diseñado para ser fácilmente personalizable.
+
+Cambiar colores:
+- Edita la configuración en st.set_page_config()
+- Modifica los temas de las gráficas Plotly
+
+Agregar nuevas páginas:
+- Duplica una sección elif en el código
+- Agrega la opción al menú de navegación
+
+Agregar nuevos datasets:
+- Crea una nueva función cargar_NOMBRE()
+- Agrégala a la sección "Datos Crudos"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 RECURSOS ADICIONALES:
+
+Documentación oficial de Streamlit:
+https://docs.streamlit.io/
+
+Galería de componentes:
+https://streamlit.io/components
+
+Foro de la comunidad:
+https://discuss.streamlit.io/
+
+Plotly para gráficas:
+https://plotly.com/python/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📸 CAPTURAS DE PANTALLA:
+
+Para incluir el dashboard en tu presentación:
+
+1. Usa la funcionalidad de captura del navegador
+2. O usa las descargas de gráficas individuales
+3. O instala una extensión de screenshot para páginas completas
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 PRÓXIMOS PASOS DESPUÉS DE EJECUTAR:
+
+1. ✓ Explora todas las secciones del dashboard
+2. ✓ Verifica que todos tus datos se carguen correctamente
+3. ✓ Genera las gráficas que necesites para tu análisis
+4. ✓ Descarga las visualizaciones para tu presentación
+5. ✓ Experimenta con los filtros y parámetros interactivos
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 TIPS PROFESIONALES:
+
+✓ Mantén el dashboard abierto mientras trabajas en tu análisis
+✓ Usa las gráficas interactivas para explorar patrones
+✓ Descarga las visualizaciones que necesites para tu reporte
+✓ Personaliza los colores según la identidad de UABC
+✓ Agrega más análisis según los vayas desarrollando
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ CHECKLIST DE VERIFICACIÓN:
+
+□ Python 3.8+ instalado
+□ Dependencias instaladas (requirements_streamlit.txt)
+□ Datos descargados en downloads/raw/
+□ Dashboard ejecutándose sin errores
+□ Todas las secciones cargan datos
+□ Gráficas se muestran correctamente
+□ Puedes navegar entre páginas
+□ Las descargas funcionan
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🎉 ¡LISTO PARA EMPEZAR!
+
+Ejecuta: streamlit run dashboard_uabc.py
+
+Y comienza a explorar tus datos de forma interactiva.
+
+═══════════════════════════════════════════════════════════════════════════════
