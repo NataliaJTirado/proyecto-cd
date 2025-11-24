@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🎓 Web Scraper - Indicadores UABC
 
 Sistema automatizado para extraer datos históricos y actuales de los indicadores públicos de la Universidad Autónoma de Baja California.
@@ -298,3 +299,7 @@ Para problemas técnicos:
 **Versión:** 1.0.0  
 **Última actualización:** Noviembre 2024  
 **Compatibilidad:** Python 3.8+, Chrome 90+
+=======
+# cd-proyecto
+Para unir nuestro proyecto
+>>>>>>> 68a699527fe8d84428955c978c03046127804084
