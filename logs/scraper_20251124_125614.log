@@ -1,0 +1,235 @@
+2025-11-24 12:56:14,268 - INFO - ================================================================================
+2025-11-24 12:56:14,268 - INFO - INICIANDO WEB SCRAPER - INDICADORES UABC
+2025-11-24 12:56:14,268 - INFO - ================================================================================
+2025-11-24 12:56:14,271 - INFO - Carpetas creadas/verificadas
+2025-11-24 12:56:17,686 - INFO - WebDriver de Chrome inicializado correctamente
+2025-11-24 12:56:17,686 - INFO - 
+Iniciando extracción de 13 datasets...
+2025-11-24 12:56:17,686 - INFO - 
+[1/13] Procesando...
+2025-11-24 12:56:17,686 - INFO - 
+============================================================
+2025-11-24 12:56:17,686 - INFO - Extrayendo: Alumnos_Licenciatura_Historico
+2025-11-24 12:56:17,686 - INFO - URL: https://indicadores.uabc.mx/indicadores/historicos/historico_AL/historico_AL
+2025-11-24 12:56:17,686 - INFO - Descripción: Histórico de alumnos de licenciatura
+2025-11-24 12:56:19,445 - INFO - Página cargada correctamente
+2025-11-24 12:56:21,493 - INFO - Tabla 'tblData' encontrada
+2025-11-24 12:56:21,608 - INFO - Haciendo click en botón de exportar...
+2025-11-24 12:56:21,847 - INFO - Esperando descarga...
+2025-11-24 12:56:24,859 - INFO - ✓ Descarga exitosa: Alumnos_Licenciatura_Historico_20251124_125624.xls
+2025-11-24 12:56:24,861 - INFO -   Tamaño: 2.11 KB
+2025-11-24 12:56:27,864 - INFO - 
+[2/13] Procesando...
+2025-11-24 12:56:27,864 - INFO - 
+============================================================
+2025-11-24 12:56:27,864 - INFO - Extrayendo: Alumnos_Posgrado_Historico
+2025-11-24 12:56:27,864 - INFO - URL: https://indicadores.uabc.mx/indicadores/historicos/historico_AP/historico_AP
+2025-11-24 12:56:27,864 - INFO - Descripción: Histórico de alumnos de posgrado
+2025-11-24 12:56:29,462 - INFO - Página cargada correctamente
+2025-11-24 12:56:31,480 - INFO - Tabla 'tblData' encontrada
+2025-11-24 12:56:31,568 - INFO - Haciendo click en botón de exportar...
+2025-11-24 12:56:31,752 - INFO - Esperando descarga...
+2025-11-24 12:56:32,768 - INFO - ✓ Descarga exitosa: Alumnos_Posgrado_Historico_20251124_125632.xls
+2025-11-24 12:56:32,770 - INFO -   Tamaño: 4.63 KB
+2025-11-24 12:56:35,771 - INFO - 
+[3/13] Procesando...
+2025-11-24 12:56:35,771 - INFO - 
+============================================================
+2025-11-24 12:56:35,771 - INFO - Extrayendo: Personal_Academico_Historico
+2025-11-24 12:56:35,771 - INFO - URL: https://indicadores.uabc.mx/indicadores/historicos/historico_PA/historico_PA
+2025-11-24 12:56:35,771 - INFO - Descripción: Histórico de personal académico
+2025-11-24 12:56:37,361 - INFO - Página cargada correctamente
+2025-11-24 12:56:39,381 - INFO - Tabla 'tblData' encontrada
+2025-11-24 12:56:39,470 - INFO - Haciendo click en botón de exportar...
+2025-11-24 12:56:39,651 - INFO - Esperando descarga...
+2025-11-24 12:56:40,658 - INFO - ✓ Descarga exitosa: Personal_Academico_Historico_20251124_125640.xls
+2025-11-24 12:56:40,661 - INFO -   Tamaño: 2.08 KB
+2025-11-24 12:56:43,663 - INFO - 
+[4/13] Procesando...
+2025-11-24 12:56:43,663 - INFO - 
+============================================================
+2025-11-24 12:56:43,663 - INFO - Extrayendo: Personal_Administrativo_Historico
+2025-11-24 12:56:43,663 - INFO - URL: https://indicadores.uabc.mx/indicadores/historicos/historico_PAS/historico_PAS
+2025-11-24 12:56:43,663 - INFO - Descripción: Histórico de personal administrativo y de servicios
+2025-11-24 12:56:45,143 - INFO - Página cargada correctamente
+2025-11-24 12:56:47,172 - INFO - Tabla 'tblData' encontrada
+2025-11-24 12:56:47,267 - INFO - Haciendo click en botón de exportar...
+2025-11-24 12:56:47,425 - INFO - Esperando descarga...
+2025-11-24 12:56:48,437 - INFO - ✓ Descarga exitosa: Personal_Administrativo_Historico_20251124_125648.xls
+2025-11-24 12:56:48,439 - INFO -   Tamaño: 2.11 KB
+2025-11-24 12:56:51,440 - INFO - 
+[5/13] Procesando...
+2025-11-24 12:56:51,440 - INFO - 
+============================================================
+2025-11-24 12:56:51,440 - INFO - Extrayendo: Programas_Licenciatura
+2025-11-24 12:56:51,440 - INFO - URL: https://indicadores.uabc.mx/indicadores/programasEducativosLicenciatura
+2025-11-24 12:56:51,440 - INFO - Descripción: Programas educativos de licenciatura
+2025-11-24 12:56:52,922 - INFO - Página cargada correctamente
+2025-11-24 12:56:54,923 - INFO - Dataset con filtros múltiples detectado
+2025-11-24 12:56:54,923 - INFO -   Seleccionando filtro: Unidad académica
+2025-11-24 12:56:55,178 - INFO -   Esperando recarga de datos...
+2025-11-24 12:57:00,272 - INFO -   Descargando archivo...
+2025-11-24 12:57:01,480 - INFO -   ✓ Descarga exitosa: Programas_Lic_UnidadAcademica_20251124_125701.xls
+2025-11-24 12:57:01,480 - INFO -     Tamaño: 7.87 KB
+2025-11-24 12:57:03,486 - INFO -   Seleccionando filtro: Área de conocimiento
+2025-11-24 12:57:03,720 - INFO -   Esperando recarga de datos...
+2025-11-24 12:57:27,891 - ERROR -   Error en filtro Área de conocimiento: Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff6e4cda235
+	0x7ff6e4a32630
+	0x7ff6e47c16dd
+	0x7ff6e481a27e
+	0x7ff6e481a58c
+	0x7ff6e486ed77
+	0x7ff6e486baba
+	0x7ff6e480b0ed
+	0x7ff6e480bf63
+	0x7ff6e4d05d60
+	0x7ff6e4cffe8a
+	0x7ff6e4d21005
+	0x7ff6e4a4d71e
+	0x7ff6e4a54e1f
+	0x7ff6e4a3b7c4
+	0x7ff6e4a3b97f
+	0x7ff6e4a218e8
+	0x7ffc7268e8d7
+	0x7ffc7410c53c
+
+2025-11-24 12:57:27,891 - WARNING - Solo se descargaron 1/2 archivos
+2025-11-24 12:57:30,896 - INFO - 
+[6/13] Procesando...
+2025-11-24 12:57:30,896 - INFO - 
+============================================================
+2025-11-24 12:57:30,896 - INFO - Extrayendo: Programas_Licenciatura_Acred_Internacional
+2025-11-24 12:57:30,896 - INFO - URL: https://indicadores.uabc.mx/indicadores/programasEducativosLicenciaturaAcreditacionInternacional
+2025-11-24 12:57:30,896 - INFO - Descripción: Programas de licenciatura con acreditación internacional
+2025-11-24 12:57:32,471 - INFO - Página cargada correctamente
+2025-11-24 12:57:55,552 - ERROR - Timeout: No se pudo cargar el elemento en Programas_Licenciatura_Acred_Internacional
+2025-11-24 12:57:58,554 - INFO - 
+[7/13] Procesando...
+2025-11-24 12:57:58,554 - INFO - 
+============================================================
+2025-11-24 12:57:58,554 - INFO - Extrayendo: Programas_Licenciatura_Historico
+2025-11-24 12:57:58,557 - INFO - URL: https://indicadores.uabc.mx/indicadores/historicos/historico_PEL/historico_PEL
+2025-11-24 12:57:58,557 - INFO - Descripción: Histórico de programas educativos de licenciatura
+2025-11-24 12:58:00,085 - INFO - Página cargada correctamente
+2025-11-24 12:58:02,111 - INFO - Tabla 'tblData' encontrada
+2025-11-24 12:58:02,191 - INFO - Haciendo click en botón de exportar...
+2025-11-24 12:58:02,364 - INFO - Esperando descarga...
+2025-11-24 12:58:03,378 - INFO - ✓ Descarga exitosa: Programas_Licenciatura_Historico_20251124_125803.xls
+2025-11-24 12:58:03,382 - INFO -   Tamaño: 2.09 KB
+2025-11-24 12:58:06,384 - INFO - 
+[8/13] Procesando...
+2025-11-24 12:58:06,384 - INFO - 
+============================================================
+2025-11-24 12:58:06,384 - INFO - Extrayendo: Programas_Posgrado
+2025-11-24 12:58:06,387 - INFO - URL: https://indicadores.uabc.mx/indicadores/programasEducativosPosgrado
+2025-11-24 12:58:06,387 - INFO - Descripción: Programas educativos de posgrado
+2025-11-24 12:58:07,991 - INFO - Página cargada correctamente
+2025-11-24 12:58:31,086 - ERROR - Timeout: No se pudo cargar el elemento en Programas_Posgrado
+2025-11-24 12:58:34,088 - INFO - 
+[9/13] Procesando...
+2025-11-24 12:58:34,088 - INFO - 
+============================================================
+2025-11-24 12:58:34,088 - INFO - Extrayendo: Programas_Posgrado_Historico
+2025-11-24 12:58:34,088 - INFO - URL: https://indicadores.uabc.mx/indicadores/historicos/historico_PEP/historico_PEP
+2025-11-24 12:58:34,088 - INFO - Descripción: Histórico de programas educativos de posgrado
+2025-11-24 12:58:35,552 - INFO - Página cargada correctamente
+2025-11-24 12:58:37,580 - INFO - Tabla 'tblData' encontrada
+2025-11-24 12:58:37,661 - INFO - Haciendo click en botón de exportar...
+2025-11-24 12:58:37,824 - INFO - Esperando descarga...
+2025-11-24 12:58:38,837 - INFO - ✓ Descarga exitosa: Programas_Posgrado_Historico_20251124_125838.xls
+2025-11-24 12:58:38,837 - INFO -   Tamaño: 3.72 KB
+2025-11-24 12:58:41,839 - INFO - 
+[10/13] Procesando...
+2025-11-24 12:58:41,839 - INFO - 
+============================================================
+2025-11-24 12:58:41,839 - INFO - Extrayendo: Relacion_Alumnos_Profesor
+2025-11-24 12:58:41,839 - INFO - URL: https://indicadores.uabc.mx/indicadores/PersonalAcademico/relacionAlumno_pa
+2025-11-24 12:58:41,842 - INFO - Descripción: Relación alumnos por profesor
+2025-11-24 12:58:43,238 - INFO - Página cargada correctamente
+2025-11-24 12:58:45,240 - INFO - Dataset con filtro detectado
+2025-11-24 12:58:45,240 - INFO -   Seleccionando filtro: Unidad académica
+2025-11-24 12:58:45,435 - INFO -   Esperando recarga de datos...
+2025-11-24 12:58:50,530 - INFO -   Descargando archivo...
+2025-11-24 12:58:51,722 - INFO -   ✓ Descarga exitosa: Relacion_AlumnosProfesor_UnidadAcademica_20251124_125851.xls
+2025-11-24 12:58:51,722 - INFO -     Tamaño: 8.49 KB
+2025-11-24 12:58:54,725 - INFO - 
+[11/13] Procesando...
+2025-11-24 12:58:54,725 - INFO - 
+============================================================
+2025-11-24 12:58:54,725 - INFO - Extrayendo: Personal_SNI_Historico
+2025-11-24 12:58:54,727 - INFO - URL: https://indicadores.uabc.mx/indicadores/historicos/historico_PASNI/historico_PASNI
+2025-11-24 12:58:54,727 - INFO - Descripción: Histórico de personal académico en el SNI
+2025-11-24 12:58:56,139 - INFO - Página cargada correctamente
+2025-11-24 12:58:58,169 - INFO - Tabla 'tblData' encontrada
+2025-11-24 12:58:58,249 - INFO - Haciendo click en botón de exportar...
+2025-11-24 12:58:58,410 - INFO - Esperando descarga...
+2025-11-24 12:58:59,420 - INFO - ✓ Descarga exitosa: Personal_SNI_Historico_20251124_125859.xls
+2025-11-24 12:58:59,420 - INFO -   Tamaño: 2.05 KB
+2025-11-24 12:59:02,424 - INFO - 
+[12/13] Procesando...
+2025-11-24 12:59:02,424 - INFO - 
+============================================================
+2025-11-24 12:59:02,424 - INFO - Extrayendo: Cuerpos_Academicos
+2025-11-24 12:59:02,424 - INFO - URL: https://indicadores.uabc.mx/indicadores/cuerposAcademicos/
+2025-11-24 12:59:02,424 - INFO - Descripción: Cuerpos académicos
+2025-11-24 12:59:03,978 - INFO - Página cargada correctamente
+2025-11-24 12:59:05,983 - INFO - Dataset con filtros múltiples detectado
+2025-11-24 12:59:05,983 - INFO -   Seleccionando filtro: Unidad académica
+2025-11-24 12:59:06,183 - INFO -   Esperando recarga de datos...
+2025-11-24 12:59:11,311 - INFO -   Descargando archivo...
+2025-11-24 12:59:12,423 - INFO -   ✓ Descarga exitosa: CuerposAcademicos_UnidadAcademica_20251124_125912.xls
+2025-11-24 12:59:12,423 - INFO -     Tamaño: 10.70 KB
+2025-11-24 12:59:14,428 - INFO -   Seleccionando filtro: Área de conocimiento
+2025-11-24 12:59:14,630 - INFO -   Esperando recarga de datos...
+2025-11-24 12:59:38,694 - ERROR -   Error en filtro Área de conocimiento: Message: 
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff6e4cda235
+	0x7ff6e4a32630
+	0x7ff6e47c16dd
+	0x7ff6e481a27e
+	0x7ff6e481a58c
+	0x7ff6e486ed77
+	0x7ff6e486baba
+	0x7ff6e480b0ed
+	0x7ff6e480bf63
+	0x7ff6e4d05d60
+	0x7ff6e4cffe8a
+	0x7ff6e4d21005
+	0x7ff6e4a4d71e
+	0x7ff6e4a54e1f
+	0x7ff6e4a3b7c4
+	0x7ff6e4a3b97f
+	0x7ff6e4a218e8
+	0x7ffc7268e8d7
+	0x7ffc7410c53c
+
+2025-11-24 12:59:38,694 - WARNING - Solo se descargaron 1/2 archivos
+2025-11-24 12:59:41,697 - INFO - 
+[13/13] Procesando...
+2025-11-24 12:59:41,697 - INFO - 
+============================================================
+2025-11-24 12:59:41,697 - INFO - Extrayendo: Cuerpos_Academicos_Historico
+2025-11-24 12:59:41,697 - INFO - URL: https://indicadores.uabc.mx/indicadores/historicos/historico_CA/historico_CA
+2025-11-24 12:59:41,700 - INFO - Descripción: Histórico de cuerpos académicos
+2025-11-24 12:59:43,215 - INFO - Página cargada correctamente
+2025-11-24 12:59:45,241 - INFO - Tabla 'tblData' encontrada
+2025-11-24 12:59:45,321 - INFO - Haciendo click en botón de exportar...
+2025-11-24 12:59:45,502 - INFO - Esperando descarga...
+2025-11-24 12:59:46,509 - INFO - ✓ Descarga exitosa: Cuerpos_Academicos_Historico_20251124_125946.xls
+2025-11-24 12:59:46,512 - INFO -   Tamaño: 4.58 KB
+2025-11-24 12:59:49,514 - INFO - 
+================================================================================
+2025-11-24 12:59:49,514 - INFO - RESUMEN DE EJECUCIÓN
+2025-11-24 12:59:49,514 - INFO - ================================================================================
+2025-11-24 12:59:49,520 - INFO - Total de datasets: 13
+2025-11-24 12:59:49,520 - INFO - Exitosos: 9 ✓
+2025-11-24 12:59:49,520 - INFO - Fallidos: 4 ✗
+2025-11-24 12:59:49,520 - INFO - Tasa de éxito: 69.2%
+2025-11-24 12:59:49,520 - INFO - Duración: 0:03:31.828597
+2025-11-24 12:59:49,520 - INFO - Archivos guardados en: C:\Users\52646\Downloads\uabc_scraper (4)\uabc_scraper\downloads\raw
+2025-11-24 12:59:49,525 - INFO - ================================================================================
+2025-11-24 12:59:54,886 - INFO - WebDriver cerrado correctamente
