@@ -1,0 +1,169 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                   🎓 WEB SCRAPER - INDICADORES UABC                          ║
+║                          GUÍA DE INICIO RÁPIDO                               ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+📦 CONTENIDO DEL PROYECTO:
+
+  uabc_scraper/
+  ├── scraper.py              ⭐ Script principal (ejecutar este)
+  ├── config.py               ⚙️  Configuración de URLs y datasets
+  ├── validator.py            ✓  Validador de archivos descargados
+  ├── ejemplos.py             📚 Ejemplos de uso programático
+  ├── setup.py                🚀 Configuración inicial automática
+  ├── requirements.txt        📋 Dependencias de Python
+  ├── README.md               📖 Documentación completa
+  ├── .gitignore              🙈 Para control de versiones
+  ├── downloads/              📂 Archivos descargados aquí
+  │   ├── raw/               (Excel originales)
+  │   └── processed/         (Procesados - futuro)
+  └── logs/                   📝 Logs de ejecución
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 INICIO RÁPIDO (3 pasos):
+
+  1️⃣  INSTALAR DEPENDENCIAS:
+      
+      pip install -r requirements.txt
+
+  2️⃣  EJECUTAR CONFIGURACIÓN AUTOMÁTICA:
+      
+      python setup.py
+      
+      Esto verificará:
+      ✓ Python 3.8+
+      ✓ Google Chrome instalado
+      ✓ Creará carpetas necesarias
+      ✓ Instalará dependencias
+      ✓ Probará que todo funcione
+
+  3️⃣  EJECUTAR SCRAPER:
+      
+      python scraper.py
+      
+      Te aparecerá un menú interactivo:
+      1. Extraer TODOS los datasets (12 datasets)
+      2. Extraer solo PRIORITARIOS (8 datasets - recomendado)
+      3. Extraer prioridad 2
+      4. Salir
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚡ INICIO SÚPER RÁPIDO (si ya tienes todo instalado):
+
+  python scraper.py
+
+  Selecciona opción 2 (prioritarios)
+  Ejecuta en modo normal (n)
+  ¡Listo! Los archivos se descargan automáticamente
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 DATASETS QUE SE EXTRAERÁN:
+
+  PRIORIDAD 1 (Críticos):
+  ✓ Alumnos de licenciatura: Histórico
+  ✓ Alumnos de posgrado: Histórico
+  ✓ Personal académico: Histórico
+  ✓ Programas educativos de licenciatura: Histórico
+  ✓ Programas educativos de posgrado: Histórico
+  ✓ Relación alumnos por profesor
+  ✓ Personal académico en el SNI: Histórico
+  ✓ Cuerpos académicos
+
+  PRIORIDAD 2 (Complementarios):
+  • Programas educativos de licenciatura (actual)
+  • Programas educativos de posgrado (actual)
+  • Personal administrativo: Histórico
+
+  PRIORIDAD 3 (Opcionales):
+  • Programas con acreditación internacional
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 SOLUCIÓN DE PROBLEMAS RÁPIDA:
+
+  ❌ Error: "ChromeDriver not found"
+     → pip install webdriver-manager
+
+  ❌ Error: "Timeout waiting for download"
+     → Edita config.py y aumenta download_timeout a 120
+
+  ❌ El navegador se cierra inmediatamente
+     → Ejecuta en modo NO headless (responde "n")
+
+  ❌ No se descargan archivos
+     → Verifica que Chrome esté instalado
+     → Ejecuta: python test_selenium.py
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 ARCHIVOS IMPORTANTES:
+
+  README.md          → Documentación completa (LÉEME PRIMERO)
+  scraper.py         → Script principal
+  validator.py       → Validar archivos descargados
+  ejemplos.py        → Ver ejemplos de uso avanzado
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ DESPUÉS DE EJECUTAR:
+
+  1. Los archivos Excel estarán en: downloads/raw/
+  
+  2. Los logs estarán en: logs/
+  
+  3. Valida los archivos con:
+     python validator.py
+  
+  4. Verás un resumen como:
+     ════════════════════════════════════════
+     RESUMEN DE EJECUCIÓN
+     ════════════════════════════════════════
+     Total de datasets: 8
+     Exitosos: 8 ✓
+     Fallidos: 0 ✗
+     Tasa de éxito: 100.0%
+     ════════════════════════════════════════
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 TIPS:
+
+  • Primera vez: Ejecuta en modo normal (NO headless) para ver qué pasa
+  • Producción: Usa modo headless para mayor velocidad
+  • Si falla un dataset, puedes extraer solo ese con ejemplos.py
+  • Los archivos se renombran con timestamp automáticamente
+  • El scraper espera 3 segundos entre peticiones (configurable)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 EJEMPLO COMPLETO DE USO:
+
+  $ python setup.py
+  [Verifica todo está OK]
+  
+  $ python scraper.py
+  Selecciona opción: 2
+  ¿Modo headless? n
+  [Espera 3-5 minutos]
+  
+  $ python validator.py
+  [Ve el reporte de validación]
+  
+  ¡Listo! Archivos en downloads/raw/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📞 AYUDA ADICIONAL:
+
+  1. Lee README.md para documentación completa
+  2. Revisa logs/ si hay errores
+  3. Ejecuta ejemplos.py para ver casos de uso
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+¡Buena suerte con tu proyecto de análisis de la UABC! 🚀
