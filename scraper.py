@@ -12,7 +12,7 @@ import glob
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -27,7 +27,7 @@ class UabcScraper:
     def __init__(self, headless=False):
         """
         Inicializa el scraper
-
+        
         Args:
             headless (bool): Si es True, ejecuta el navegador sin interfaz gráfica
         """
@@ -165,6 +165,73 @@ class UabcScraper:
         
         return False
     
+    def select_filter_and_download(self, filter_value, suffix):
+        """
+        Selecciona un filtro y descarga el archivo
+        
+        Args:
+            filter_value (str): Valor del filtro a seleccionar
+            suffix (str): Sufijo para el nombre del archivo
+            
+        Returns:
+            bool: True si fue exitoso, False si falló
+        """
+        try:
+            wait = WebDriverWait(self.driver, 15)
+            
+            # Seleccionar el filtro
+            self.log_message(f"  Seleccionando filtro: {filter_value}")
+            select_element = wait.until(
+                EC.presence_of_element_located((By.ID, "cbNivel"))
+            )
+            
+            # Usar Select para cambiar el valor
+            select = Select(select_element)
+            select.select_by_visible_text(filter_value)
+            
+            # Esperar a que se recarguen los datos (la función onchange)
+            self.log_message("  Esperando recarga de datos...")
+            time.sleep(3)
+            
+            # Esperar a que la tabla se actualice
+            wait.until(EC.presence_of_element_located((By.ID, SELECTORS["tabla"])))
+            time.sleep(2)
+            
+            # Buscar botón de exportar
+            boton_excel = wait.until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, SELECTORS["boton_excel"]))
+            )
+            
+            # Contar archivos antes
+            files_before = set(glob.glob(f"{FOLDERS['raw']}/*.xls*"))
+            
+            self.log_message("  Descargando archivo...")
+            boton_excel.click()
+            
+            # Esperar descarga
+            if self.wait_for_download(SELENIUM_CONFIG["download_timeout"]):
+                files_after = set(glob.glob(f"{FOLDERS['raw']}/*.xls*"))
+                new_files = files_after - files_before
+                
+                if new_files:
+                    downloaded_file = list(new_files)[0]
+                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                    extension = os.path.splitext(downloaded_file)[1]
+                    new_filename = f"{FOLDERS['raw']}/{suffix}_{timestamp}{extension}"
+                    
+                    os.rename(downloaded_file, new_filename)
+                    
+                    file_size = os.path.getsize(new_filename) / 1024
+                    self.log_message(f"  ✓ Descarga exitosa: {os.path.basename(new_filename)}")
+                    self.log_message(f"    Tamaño: {file_size:.2f} KB")
+                    return True
+                    
+            return False
+            
+        except Exception as e:
+            self.log_message(f"  Error en filtro {filter_value}: {e}", "ERROR")
+            return False
+    
     def scrape_dataset(self, dataset):
         """
         Extrae un dataset específico
@@ -188,7 +255,7 @@ class UabcScraper:
             # 1. Navegar a la URL
             self.driver.get(full_url)
             self.log_message("Página cargada correctamente")
-            time.sleep(2)  # Esperar a que cargue completamente
+            time.sleep(2)
             
             # 2. Esperar a que la tabla esté presente
             wait = WebDriverWait(self.driver, 15)
@@ -197,48 +264,110 @@ class UabcScraper:
             )
             self.log_message(f"Tabla '{SELECTORS['tabla']}' encontrada")
             
-            # 3. Buscar y hacer click en el botón de exportar
-            boton_excel = wait.until(
-                EC.element_to_be_clickable((By.CSS_SELECTOR, SELECTORS["boton_excel"]))
-            )
+            # ===== CASOS ESPECIALES CON FILTROS =====
             
-            # Contar archivos antes de la descarga
-            files_before = set(glob.glob(f"{FOLDERS['raw']}/*.xls*"))
-            
-            self.log_message("Haciendo click en botón de exportar...")
-            boton_excel.click()
-            
-            # 4. Esperar a que se complete la descarga
-            self.log_message("Esperando descarga...")
-            if self.wait_for_download(SELENIUM_CONFIG["download_timeout"]):
-                # Obtener archivo recién descargado
-                files_after = set(glob.glob(f"{FOLDERS['raw']}/*.xls*"))
-                new_files = files_after - files_before
+            # CASO 1: Programas educativos de licenciatura
+            if nombre == "Programas_Licenciatura":
+                self.log_message("Dataset con filtros múltiples detectado")
+                success_count = 0
                 
-                if new_files:
-                    downloaded_file = list(new_files)[0]
-                    
-                    # Renombrar archivo con nombre descriptivo
-                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                    extension = os.path.splitext(downloaded_file)[1]
-                    new_filename = f"{FOLDERS['raw']}/{nombre}_{timestamp}{extension}"
-                    
-                    os.rename(downloaded_file, new_filename)
-                    
-                    file_size = os.path.getsize(new_filename) / 1024  # KB
-                    self.log_message(f"✓ Descarga exitosa: {os.path.basename(new_filename)}")
-                    self.log_message(f"  Tamaño: {file_size:.2f} KB")
-                    
+                # Descargar por Unidad académica
+                if self.select_filter_and_download("Unidad académica", "Programas_Lic_UnidadAcademica"):
+                    success_count += 1
+                
+                time.sleep(2)
+                
+                # Descargar por Área de conocimiento
+                if self.select_filter_and_download("Área de conocimiento", "Programas_Lic_AreaConocimiento"):
+                    success_count += 1
+                
+                if success_count == 2:
                     self.stats["exitosos"] += 1
                     return True
                 else:
-                    self.log_message("No se detectó archivo nuevo descargado", "WARNING")
+                    self.log_message(f"Solo se descargaron {success_count}/2 archivos", "WARNING")
                     self.stats["fallidos"] += 1
                     return False
+            
+            # CASO 2: Relación alumnos por profesor
+            elif nombre == "Relacion_Alumnos_Profesor":
+                self.log_message("Dataset con filtro detectado")
+                
+                # Descargar por Unidad académica
+                if self.select_filter_and_download("Unidad académica", "Relacion_AlumnosProfesor_UnidadAcademica"):
+                    self.stats["exitosos"] += 1
+                    return True
+                else:
+                    self.stats["fallidos"] += 1
+                    return False
+            
+            # CASO 3: Cuerpos académicos
+            elif nombre == "Cuerpos_Academicos":
+                self.log_message("Dataset con filtros múltiples detectado")
+                success_count = 0
+                
+                # Descargar por Unidad académica
+                if self.select_filter_and_download("Unidad académica", "CuerposAcademicos_UnidadAcademica"):
+                    success_count += 1
+                
+                time.sleep(2)
+                
+                # Descargar por Área de conocimiento
+                if self.select_filter_and_download("Área de conocimiento", "CuerposAcademicos_AreaConocimiento"):
+                    success_count += 1
+                
+                if success_count == 2:
+                    self.stats["exitosos"] += 1
+                    return True
+                else:
+                    self.log_message(f"Solo se descargaron {success_count}/2 archivos", "WARNING")
+                    self.stats["fallidos"] += 1
+                    return False
+            
+            # ===== CASO NORMAL (sin filtros) =====
             else:
-                self.log_message("Timeout esperando descarga", "ERROR")
-                self.stats["fallidos"] += 1
-                return False
+                # 3. Buscar y hacer click en el botón de exportar
+                boton_excel = wait.until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, SELECTORS["boton_excel"]))
+                )
+                
+                # Contar archivos antes de la descarga
+                files_before = set(glob.glob(f"{FOLDERS['raw']}/*.xls*"))
+                
+                self.log_message("Haciendo click en botón de exportar...")
+                boton_excel.click()
+                
+                # 4. Esperar a que se complete la descarga
+                self.log_message("Esperando descarga...")
+                if self.wait_for_download(SELENIUM_CONFIG["download_timeout"]):
+                    # Obtener archivo recién descargado
+                    files_after = set(glob.glob(f"{FOLDERS['raw']}/*.xls*"))
+                    new_files = files_after - files_before
+                    
+                    if new_files:
+                        downloaded_file = list(new_files)[0]
+                        
+                        # Renombrar archivo con nombre descriptivo
+                        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                        extension = os.path.splitext(downloaded_file)[1]
+                        new_filename = f"{FOLDERS['raw']}/{nombre}_{timestamp}{extension}"
+                        
+                        os.rename(downloaded_file, new_filename)
+                        
+                        file_size = os.path.getsize(new_filename) / 1024  # KB
+                        self.log_message(f"✓ Descarga exitosa: {os.path.basename(new_filename)}")
+                        self.log_message(f"  Tamaño: {file_size:.2f} KB")
+                        
+                        self.stats["exitosos"] += 1
+                        return True
+                    else:
+                        self.log_message("No se detectó archivo nuevo descargado", "WARNING")
+                        self.stats["fallidos"] += 1
+                        return False
+                else:
+                    self.log_message("Timeout esperando descarga", "ERROR")
+                    self.stats["fallidos"] += 1
+                    return False
             
         except TimeoutException:
             self.log_message(f"Timeout: No se pudo cargar el elemento en {nombre}", "ERROR")
