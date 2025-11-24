@@ -1,0 +1,259 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    ➕ NUEVO DATASET AGREGADO - V1.1.2                        
+═══════════════════════════════════════════════════════════════════════════════
+
+📅 Fecha: 24 Nov 2024
+🔖 Versión: 1.1.1 → 1.1.2
+🎯 Tipo: Adición de dataset
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ NUEVO DATASET AGREGADO:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                             │
+│  📊 Cuerpos Académicos: Histórico                                          │
+│                                                                             │
+│  URL: /indicadores/historicos/historico_CA/historico_CA                    │
+│  Prioridad: 1 (Crítico)                                                    │
+│  Tipo: Histórico simple (sin filtros)                                      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 ¿QUÉ DATOS CONTIENE?
+
+Serie temporal (2018-2023) de cuerpos académicos clasificados por nivel:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Periodo │ Total UABC │ En Formación │ En Consolidación │ Consolidados      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 2018-2  │    215     │      91      │        63        │       61          │
+│ 2019-1  │    215     │      91      │        63        │       61          │
+│ 2019-2  │    223     │     104      │        52        │       67          │
+│ 2020-1  │    223     │     104      │        52        │       67          │
+│ 2020-2  │    227     │     101      │        55        │       71          │
+│ 2021-1  │    230     │      84      │        66        │       80          │
+│ 2021-2  │    235     │      83      │        73        │       79          │
+│ 2022-1  │    234     │      81      │        72        │       81          │
+│ 2022-2  │    235     │      78      │        76        │       81          │
+│ 2023-1  │    233     │      67      │        86        │       80          │
+│ 2023-2  │    232     │      73      │        83        │       76          │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 ¿PARA QUÉ SIRVE?
+
+### 1️⃣ ANÁLISIS DESCRIPTIVO:
+
+✓ Evolución temporal de cuerpos académicos
+✓ Distribución por nivel de madurez
+✓ Tendencias de consolidación institucional
+
+**Hallazgos clave:**
+- Total estable: 215 → 232 (+7.9% en 5 años)
+- En Formación: 91 → 73 (-19.8%) ⚠️ Bajando
+- Consolidados: 61 → 76 (+24.6%) ✓ Creciendo
+
+**Interpretación:** 
+La institución está MADURANDO (menos en formación, más consolidados)
+
+---
+
+### 2️⃣ ANÁLISIS INFERENCIAL:
+
+**Hipótesis que puedes probar:**
+
+H1: ¿Los cuerpos consolidados se correlacionan con programas acreditados?
+    Variables: Consolidados vs Programas con calidad (134/150)
+
+H2: ¿El aumento de consolidados coincide con aumento de académicos SNI?
+    Variables: Consolidados vs Personal SNI (937)
+
+H3: ¿Los cuerpos consolidados impactan productividad en investigación?
+    Variables: Consolidados vs Proyectos investigación (641)
+
+H4: ¿La consolidación de cuerpos académicos es sostenible?
+    Variables: Tendencia "En Formación" (bajando) vs necesidades futuras
+
+---
+
+### 3️⃣ ANÁLISIS PREDICTIVO:
+
+**Proyecciones 2025-2030:**
+
+Modelo de serie temporal:
+- Tasa crecimiento consolidados: ~4.5% anual
+- Proyección 2030: ~104 cuerpos consolidados
+
+**Cálculo:**
+```
+2023-2: 76 consolidados
+Tasa anual: 4.5%
+2030: 76 × (1.045)^7 = 104 cuerpos consolidados
+```
+
+**Implicaciones:**
+- Mayor capacidad para posgrados de calidad
+- Fortalecimiento de investigación institucional
+- Necesidad de rejuvenecer "En Formación"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔗 CÓMO SE RELACIONA CON OTROS DATASETS:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                             │
+│  Cuerpos_Academicos_Historico (NUEVO)                                      │
+│         ↓                                                                   │
+│  Evolución temporal 2018-2023                                               │
+│         ↓                                                                   │
+│  ┌──────────────────┬──────────────────┬──────────────────┐                │
+│  ↓                  ↓                  ↓                  ↓                │
+│                                                                             │
+│  Personal_SNI       Programas_Posgrado  Proyectos_       Cuerpos_Academicos│
+│  (937 académicos)   (69 en SECIHTI)    Investigacion     (Por Unidad/Área) │
+│                                         (641 proyectos)                     │
+│                                                                             │
+│  ¿Correlación?      ¿Correlación?      ¿Correlación?    ¿Distribución?    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+**Complementa a:**
+- Cuerpos_Academicos (por Unidad y Área) → Te dirá DÓNDE están
+- Personal_SNI_Historico → Relación SNI-Cuerpos Académicos
+- Programas_Posgrado_Historico → Impacto en calidad
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📈 ANÁLISIS QUE PUEDES HACER:
+
+### 1. Tasa de Consolidación:
+```python
+tasa_anual_consolidados = ((76/61)^(1/5) - 1) * 100
+= 4.5% anual
+```
+
+### 2. Proporción de Madurez:
+```
+2018-2: Consolidados = 28.4% del total
+2023-2: Consolidados = 32.8% del total
+Mejora: +4.4 puntos porcentuales
+```
+
+### 3. Productividad por Cuerpo:
+```
+Proyectos / Cuerpo Consolidado = 641 / 76 = 8.4 proyectos
+(Este es un ratio institucional promedio)
+```
+
+### 4. Capacidad de Posgrado:
+```
+Programas SECIHTI / Cuerpo Consolidado = 69 / 76 = 0.91
+(Casi 1 programa de calidad por cuerpo consolidado)
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 NUEVA CUENTA DE DATASETS:
+
+ANTES (V1.1.1):
+├─ Prioridad 1: 8 datasets → 9 archivos
+├─ Prioridad 2: 3 datasets → 4 archivos
+└─ Total: 11 datasets → 13 archivos
+
+AHORA (V1.1.2):
+├─ Prioridad 1: 9 datasets → 10 archivos ⭐ +1
+├─ Prioridad 2: 3 datasets → 4 archivos
+└─ Total: 12 datasets → 14 archivos
+
+NUEVO ARCHIVO:
+✓ Cuerpos_Academicos_Historico_TIMESTAMP.xls
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 PARA TU PROYECTO:
+
+Este dataset es CRÍTICO para:
+
+### Tu análisis de CALIDAD institucional:
+> "La UABC ha experimentado un proceso de maduración académica, 
+> incrementando sus cuerpos consolidados de 61 a 76 (+24.6%) 
+> entre 2018-2023, lo que fortalece su capacidad de investigación 
+> y soporte a programas de posgrado de calidad"
+
+### Tu análisis PREDICTIVO:
+> "Con una tasa de crecimiento del 4.5% anual en cuerpos consolidados, 
+> se proyecta alcanzar ~104 cuerpos en 2030, lo que permitirá 
+> sostener aproximadamente 95-100 programas de posgrado de calidad"
+
+### Tu análisis INFERENCIAL:
+> "Existe una correlación positiva entre el incremento de cuerpos 
+> académicos consolidados y el número de programas en el SECIHTI 
+> (r = 0.XX, p < 0.05)"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️ OBSERVACIÓN IMPORTANTE:
+
+Tendencia PREOCUPANTE detectada:
+
+📉 "En Formación" está BAJANDO constantemente:
+   2018-2: 91 → 2023-2: 73 (-19.8%)
+
+**Riesgo:** Si no se incorporan nuevos cuerpos en formación, 
+podría haber problema de renovación generacional a largo plazo.
+
+**Recomendación para tu análisis:**
+Mencionar este riesgo en las conclusiones y sugerir políticas 
+institucionales para incentivar formación de nuevos cuerpos académicos.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 CÓMO DESCARGARLO:
+
+El scraper YA INCLUYE este dataset en Prioridad 1.
+
+Al ejecutar:
+```bash
+python scraper.py
+# Opción 2 (Prioridad 1)
+```
+
+Se descargará automáticamente:
+✓ Cuerpos_Academicos_Historico_TIMESTAMP.xls
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 CAMBIOS TÉCNICOS:
+
+Archivo modificado: config.py
+
+AGREGADO:
+```python
+{
+    "nombre": "Cuerpos_Academicos_Historico",
+    "url": "/indicadores/historicos/historico_CA/historico_CA",
+    "descripcion": "Histórico de cuerpos académicos",
+    "prioridad": 1
+}
+```
+
+No requiere lógica especial (es un histórico simple como los demás).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ LISTO PARA USAR
+
+El scraper actualizado ya incluye este dataset.
+Simplemente descarga el nuevo ZIP y ejecuta.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Versión: 1.1.2
+Tipo de cambio: Adición de dataset
+Impacto: Mejora en análisis de calidad institucional
+
+═══════════════════════════════════════════════════════════════════════════════

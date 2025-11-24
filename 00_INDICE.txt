@@ -1,0 +1,218 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    📚 ÍNDICE DE ARCHIVOS DEL PROYECTO                         
+                         WEB SCRAPER - INDICADORES UABC                        
+═══════════════════════════════════════════════════════════════════════════════
+
+🎯 EMPIEZA AQUÍ:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 1. INICIO_RAPIDO.txt    ⭐ LEE ESTO PRIMERO                                 │
+│    Guía visual rápida para empezar en 3 pasos                              │
+│                                                                             │
+│ 2. CHECKLIST.txt        ✅ Verifica que tienes todo listo                   │
+│    Lista de verificación completa paso a paso                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+───────────────────────────────────────────────────────────────────────────────
+
+📖 DOCUMENTACIÓN COMPLETA:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ • README.md             📚 Documentación técnica completa (400+ líneas)     │
+│   - Instalación detallada                                                  │
+│   - Guía de uso                                                            │
+│   - Solución de problemas                                                  │
+│   - Configuración avanzada                                                 │
+│                                                                             │
+│ • RESUMEN_PROYECTO.md   📊 Resumen ejecutivo del proyecto                   │
+│   - Características principales                                            │
+│   - Arquitectura del sistema                                               │
+│   - Casos de uso                                                           │
+│   - Roadmap futuro                                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+───────────────────────────────────────────────────────────────────────────────
+
+🐍 SCRIPTS DE PYTHON:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PRINCIPAL:                                                                  │
+│ • scraper.py            🎯 Script principal del web scraper (700+ líneas)   │
+│   Comando: python scraper.py                                               │
+│   Función: Extrae todos los datasets de UABC                               │
+│                                                                             │
+│ CONFIGURACIÓN:                                                             │
+│ • config.py             ⚙️  Configuración centralizada del scraper          │
+│   - URLs de datasets                                                       │
+│   - Timeouts y delays                                                      │
+│   - Selectores HTML                                                        │
+│   - Prioridades de datasets                                                │
+│                                                                             │
+│ UTILIDADES:                                                                │
+│ • validator.py          ✓ Validador de archivos descargados                │
+│   Comando: python validator.py                                             │
+│   Función: Verifica integridad de los Excel                                │
+│                                                                             │
+│ • setup.py              🚀 Configuración automática inicial                 │
+│   Comando: python setup.py                                                 │
+│   Función: Verifica requisitos e instala todo                              │
+│                                                                             │
+│ EJEMPLOS:                                                                  │
+│ • ejemplos.py           📚 6 ejemplos de uso programático                   │
+│   Comando: python ejemplos.py                                              │
+│   Función: Demuestra casos de uso avanzados                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+───────────────────────────────────────────────────────────────────────────────
+
+⚙️ ARCHIVOS DE CONFIGURACIÓN:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ • requirements.txt      📋 Dependencias de Python                           │
+│   selenium, pandas, openpyxl, etc.                                         │
+│                                                                             │
+│ • .gitignore            🙈 Para control de versiones Git                    │
+│   Ignora archivos temporales y descargas                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+───────────────────────────────────────────────────────────────────────────────
+
+📂 ESTRUCTURA DE CARPETAS:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ downloads/                                                                  │
+│ ├── raw/                📥 Archivos Excel originales descargados            │
+│ │   └── README.txt      Explicación de esta carpeta                        │
+│ │                                                                           │
+│ └── processed/          🔄 Archivos procesados (futuro)                     │
+│     └── README.txt      Explicación de esta carpeta                        │
+│                                                                             │
+│ logs/                   📝 Logs de ejecución                                │
+│ └── README.txt          Explicación de esta carpeta                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+───────────────────────────────────────────────────────────────────────────────
+
+🎯 FLUJO DE TRABAJO RECOMENDADO:
+
+1️⃣  PREPARACIÓN (Primera vez):
+    ├─ Leer: INICIO_RAPIDO.txt
+    ├─ Verificar: CHECKLIST.txt
+    ├─ Instalar: pip install -r requirements.txt
+    └─ Configurar: python setup.py
+
+2️⃣  EXTRACCIÓN DE DATOS:
+    ├─ Ejecutar: python scraper.py
+    ├─ Seleccionar opción 2 (datasets prioritarios)
+    └─ Esperar: 5-7 minutos
+
+3️⃣  VALIDACIÓN:
+    ├─ Verificar: downloads/raw/ (deben haber ~8 archivos)
+    ├─ Validar: python validator.py
+    └─ Revisar: logs/ (ver log más reciente)
+
+4️⃣  ANÁLISIS (Tu proyecto):
+    ├─ Abrir archivos Excel
+    ├─ Importar a Python/R
+    ├─ Realizar análisis descriptivo
+    ├─ Realizar análisis inferencial
+    └─ Realizar análisis predictivo
+
+───────────────────────────────────────────────────────────────────────────────
+
+📊 DATASETS QUE EXTRAE EL SCRAPER:
+
+PRIORIDAD 1 (Recomendado - 8 datasets):
+✓ Alumnos de licenciatura: Histórico
+✓ Alumnos de posgrado: Histórico
+✓ Personal académico: Histórico
+✓ Programas educativos de licenciatura: Histórico
+✓ Programas educativos de posgrado: Histórico
+✓ Relación alumnos por profesor
+✓ Personal académico en el SNI: Histórico
+✓ Cuerpos académicos
+
+PRIORIDAD 2 (Complementarios - 3 datasets):
+• Programas educativos de licenciatura (actual)
+• Programas educativos de posgrado (actual)
+• Personal administrativo: Histórico
+
+PRIORIDAD 3 (Opcionales - 1 dataset):
+• Programas con acreditación internacional
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔍 GUÍAS RÁPIDAS POR SITUACIÓN:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ SITUACIÓN                          │ ARCHIVO A CONSULTAR                    │
+├────────────────────────────────────┼────────────────────────────────────────┤
+│ Primera vez usando el scraper      │ INICIO_RAPIDO.txt                      │
+│ Necesito verificar requisitos      │ CHECKLIST.txt                          │
+│ Quiero entender todo el sistema    │ README.md                              │
+│ Necesito visión general            │ RESUMEN_PROYECTO.md                    │
+│ Algo salió mal                     │ logs/ + README.md (Solución problemas) │
+│ Quiero personalizar datasets       │ config.py + README.md                  │
+│ Necesito ejemplos de código        │ ejemplos.py                            │
+│ Quiero validar descargas           │ python validator.py                    │
+│ Configuración inicial              │ python setup.py                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+───────────────────────────────────────────────────────────────────────────────
+
+💡 COMANDOS ESENCIALES:
+
+# Configuración inicial (primera vez)
+pip install -r requirements.txt
+python setup.py
+
+# Extraer datos (uso normal)
+python scraper.py
+
+# Validar archivos descargados
+python validator.py
+
+# Ver ejemplos avanzados
+python ejemplos.py
+
+# Probar conexión (si hay problemas)
+python test_selenium.py
+
+───────────────────────────────────────────────────────────────────────────────
+
+📞 AYUDA ADICIONAL:
+
+Si necesitas ayuda:
+1. Consulta README.md (sección "Solución de problemas")
+2. Revisa los logs en logs/
+3. Ejecuta python validator.py para diagnóstico
+4. Lee los ejemplos en ejemplos.py
+5. Verifica CHECKLIST.txt
+
+───────────────────────────────────────────────────────────────────────────────
+
+✅ TODO LISTO CUANDO:
+
+[✓] Todos los archivos presentes
+[✓] Python 3.8+ instalado
+[✓] Google Chrome instalado
+[✓] Dependencias instaladas (requirements.txt)
+[✓] python setup.py ejecutado sin errores
+[✓] python scraper.py funciona
+[✓] Archivos en downloads/raw/
+[✓] python validator.py muestra 100% OK
+
+───────────────────────────────────────────────────────────────────────────────
+
+🎓 PARA TU PROYECTO:
+
+Este scraper es parte del proyecto:
+"Evolución y Proyección de la Capacidad Académica Institucional - UABC"
+
+Los datos extraídos te permitirán realizar:
+• Análisis Descriptivo (caracterización y tendencias)
+• Análisis Inferencial (correlaciones y pruebas de hipótesis)
+• Análisis Predictivo (proyecciones y forecasting)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Versión: 1.0.0
+Fecha: Noviembre 2024
+Última actualización: 2024-11-22
+
+═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,246 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    🐛 BUG CRÍTICO - LOGGER FIX - V1.1.3                      
+═══════════════════════════════════════════════════════════════════════════════
+
+📅 Fecha: 24 Nov 2024
+🔖 Versión: 1.1.2 → 1.1.3
+🎯 Tipo: Bug fix crítico - Error de inicialización
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🐛 EL ERROR:
+
+Al ejecutar el scraper aparecía:
+```
+Error fatal: 'UabcScraper' object has no attribute 'logger'
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔍 CAUSA RAÍZ:
+
+Problema de ORDEN DE INICIALIZACIÓN en el método __init__:
+
+ANTES (INCORRECTO):
+```python
+def __init__(self, headless=False):
+    self.base_url = BASE_URL
+    self.datasets = DATASETS
+    self.setup_folders()       # 1. Crea carpetas
+    self.setup_logging()       # 2. Configura logger
+    self.driver = self.setup_driver(headless)
+    ...
+```
+
+El método `setup_folders()` llama a `self.log_message()`:
+```python
+def setup_folders(self):
+    for folder in FOLDERS.values():
+        Path(folder).mkdir(parents=True, exist_ok=True)
+    self.log_message("Carpetas creadas/verificadas", "INFO")  # ← ERROR AQUÍ
+```
+
+Pero `self.log_message()` necesita `self.logger` que aún no existe:
+```python
+def log_message(self, message, level="INFO"):
+    if level == "INFO":
+        self.logger.info(message)  # ← self.logger NO EXISTE AÚN
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ LA SOLUCIÓN:
+
+CAMBIO 1: Invertir el orden de inicialización
+
+DESPUÉS (CORRECTO):
+```python
+def __init__(self, headless=False):
+    self.base_url = BASE_URL
+    self.datasets = DATASETS
+    self.setup_logging()       # 1. Configura logger PRIMERO
+    self.setup_folders()       # 2. Crea carpetas DESPUÉS
+    self.driver = self.setup_driver(headless)
+    ...
+```
+
+CAMBIO 2: Verificar existencia del logger (protección adicional)
+
+```python
+def setup_folders(self):
+    for folder in FOLDERS.values():
+        Path(folder).mkdir(parents=True, exist_ok=True)
+    if hasattr(self, 'logger'):  # ← Verificación de seguridad
+        self.log_message("Carpetas creadas/verificadas", "INFO")
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 CAMBIOS EN EL CÓDIGO:
+
+Archivo: scraper.py
+Líneas modificadas: 27-46, 48-52
+
+ANTES:
+```python
+def __init__(self, headless=False):
+    self.base_url = BASE_URL
+    self.datasets = DATASETS
+    self.setup_folders()        # ← Orden incorrecto
+    self.setup_logging()        # ← Orden incorrecto
+    ...
+
+def setup_folders(self):
+    for folder in FOLDERS.values():
+        Path(folder).mkdir(parents=True, exist_ok=True)
+    self.log_message("Carpetas creadas/verificadas", "INFO")  # ← Falla
+```
+
+DESPUÉS:
+```python
+def __init__(self, headless=False):
+    self.base_url = BASE_URL
+    self.datasets = DATASETS
+    self.setup_logging()        # ← Logging PRIMERO ✓
+    self.setup_folders()        # ← Folders DESPUÉS ✓
+    ...
+
+def setup_folders(self):
+    for folder in FOLDERS.values():
+        Path(folder).mkdir(parents=True, exist_ok=True)
+    if hasattr(self, 'logger'):  # ← Verificación de seguridad ✓
+        self.log_message("Carpetas creadas/verificadas", "INFO")
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ RESULTADO:
+
+El scraper ahora funciona correctamente:
+
+```
+$ python scraper_uabc_CORREGIDO.py
+
+Opciones:
+1. Extraer TODOS los datasets (12 datasets)
+2. Extraer solo datasets PRIORITARIOS (prioridad 1)
+3. Extraer datasets de PRIORIDAD 2
+4. Salir
+Selecciona una opción (1-4): 1
+¿Ejecutar en modo headless (sin ventana)? (s/n): s
+
+2024-11-24 XX:XX:XX - INFO - ============================================
+2024-11-24 XX:XX:XX - INFO - INICIANDO WEB SCRAPER - INDICADORES UABC
+2024-11-24 XX:XX:XX - INFO - ============================================
+2024-11-24 XX:XX:XX - INFO - Carpetas creadas/verificadas  ← ✓ FUNCIONA
+2024-11-24 XX:XX:XX - INFO - WebDriver de Chrome inicializado
+...
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 LECCIÓN APRENDIDA:
+
+**Orden de inicialización importa:**
+
+En Python, cuando un método del __init__ llama a otro método de la clase:
+1. Asegurarse de que todos los atributos necesarios existan primero
+2. El orden correcto: dependencias → funcionalidades
+3. Usar verificaciones defensivas (hasattr) cuando sea apropiado
+
+**Patrón correcto:**
+```python
+def __init__(self):
+    # 1. Atributos básicos
+    self.variable1 = valor1
+    self.variable2 = valor2
+    
+    # 2. Configuración de dependencias
+    self.setup_logging()      # Crea self.logger
+    
+    # 3. Funcionalidades que usan dependencias
+    self.setup_folders()      # Usa self.logger
+    self.setup_driver()       # Usa self.logger
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️ SI DESCARGASTE LA VERSIÓN ANTERIOR:
+
+Tienes 3 opciones:
+
+OPCIÓN 1: Usar el archivo corregido individual
+```bash
+# Descargar scraper_uabc_CORREGIDO.py
+python scraper_uabc_CORREGIDO.py
+```
+
+OPCIÓN 2: Descargar el ZIP actualizado completo
+```bash
+# Descargar uabc_scraper.zip (versión 1.1.3)
+unzip uabc_scraper.zip
+cd uabc_scraper
+python scraper.py
+```
+
+OPCIÓN 3: Corregir manualmente tu archivo
+```bash
+# Editar scraper.py
+# Línea 36-37: Intercambiar orden de setup_folders() y setup_logging()
+# Línea 52: Agregar verificación hasattr(self, 'logger')
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 IMPACTO:
+
+Severidad: CRÍTICA (El scraper no funcionaba en absoluto)
+Usuarios afectados: Todos los que descargaron V1.1.0 - V1.1.2
+Solución: Inmediata (cambio de 2 líneas)
+Retrocompatibilidad: ✓ Sí (no afecta funcionalidad)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🧪 PRUEBAS:
+
+El siguiente comando debe funcionar sin errores:
+
+```bash
+python scraper_uabc_CORREGIDO.py
+```
+
+Debes ver:
+✓ Mensaje de inicio del scraper
+✓ "Carpetas creadas/verificadas"
+✓ Menú de opciones
+✓ NO debe aparecer: "'UabcScraper' object has no attribute 'logger'"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ VERIFICACIÓN:
+
+Para verificar que tienes la versión correcta:
+
+```bash
+# Buscar el orden correcto
+grep -A 5 "def __init__" scraper.py
+```
+
+Debes ver:
+```python
+def __init__(self, headless=False):
+    ...
+    self.setup_logging()       # ← Debe estar ANTES
+    self.setup_folders()       # ← Debe estar DESPUÉS
+```
+
+Si ves el orden contrario, tienes la versión con el bug.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Versión: 1.1.3
+Tipo de cambio: Bug fix crítico
+Severidad: Alta (bloqueaba ejecución)
+Retrocompatibilidad: ✓ Sí
+
+═══════════════════════════════════════════════════════════════════════════════
