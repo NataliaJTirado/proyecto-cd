@@ -43,4 +43,4 @@ if pagina == "Limpieza de Datos":
 # ============================================================================
 
 elif pagina == "Análisis Descriptivo":
-    st.title("📈 Análisis Descriptivo")
+    st.title(" Análisis Descriptivo")
