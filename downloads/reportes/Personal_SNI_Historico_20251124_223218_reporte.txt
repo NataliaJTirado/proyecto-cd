@@ -1,0 +1,10 @@
+REPORTE DE CALIDAD: Personal_SNI_Historico_20251124_223218
+================================================================================
+
+Filas: 13
+Columnas: 3
+
+Columnas:
+  - periodo (object)
+  - recuento (int64)
+  - fecha (object)

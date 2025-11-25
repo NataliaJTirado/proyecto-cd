@@ -1,9 +1,0 @@
-REPORTE DE CALIDAD: Personal_Administrativo_Historico_20251124_191455
-================================================================================
-
-Filas: 13
-Columnas: 2
-
-Columnas:
-  - periodo (object)
-  - recuento_personal_administrativo_y_de_servicios (int64)

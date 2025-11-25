@@ -6,6 +6,7 @@ Automatiza la descarga de datos históricos y actuales de la Universidad Autóno
 import os
 import time
 import logging
+import argparse
 from datetime import datetime
 from pathlib import Path
 import glob
@@ -440,45 +441,118 @@ class UabcScraper:
 
 def main():
     """Función principal"""
-    print("\n" + "="*80)
-    print("WEB SCRAPER - INDICADORES UABC")
-    print("="*80)
-    print("\nOpciones:")
-    print("1. Extraer TODOS los datasets (12 datasets)")
-    print("2. Extraer solo datasets PRIORITARIOS (prioridad 1)")
-    print("3. Extraer datasets de PRIORIDAD 2")
-    print("4. Salir")
-    
-    opcion = input("\nSelecciona una opción (1-4): ").strip()
-    
-    if opcion == "4":
-        print("Saliendo...")
-        return
-    
-    headless_input = input("\n¿Ejecutar en modo headless (sin ventana)? (s/n): ").strip().lower()
-    headless = headless_input == "s"
-    
-    scraper = None
-    try:
-        scraper = UabcScraper(headless=headless)
-        
-        if opcion == "1":
-            scraper.scrape_all()
-        elif opcion == "2":
-            scraper.scrape_priority(priority=1)
-        elif opcion == "3":
-            scraper.scrape_priority(priority=2)
-        else:
-            print("Opción no válida")
+    parser = argparse.ArgumentParser(
+        description='Web Scraper para Indicadores UABC',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Ejemplos de uso:
+  python scraper.py --all                    # Extraer todos los datasets
+  python scraper.py --priority 1             # Extraer solo prioridad 1
+  python scraper.py --priority 2 --headless  # Prioridad 2 sin ventana
+  python scraper.py --interactive            # Modo interactivo (menú)
+        """
+    )
+
+    parser.add_argument(
+        '--all',
+        action='store_true',
+        help='Extraer TODOS los datasets (12 datasets)'
+    )
+
+    parser.add_argument(
+        '--priority',
+        type=int,
+        choices=[1, 2, 3],
+        help='Extraer solo datasets con la prioridad especificada (1, 2 o 3)'
+    )
+
+    parser.add_argument(
+        '--headless',
+        action='store_true',
+        help='Ejecutar en modo headless (sin ventana del navegador)'
+    )
+
+    parser.add_argument(
+        '--interactive',
+        action='store_true',
+        help='Modo interactivo con menú (igual que antes)'
+    )
+
+    args = parser.parse_args()
+
+    # Modo interactivo (comportamiento original)
+    if args.interactive or (not args.all and args.priority is None):
+        print("\n" + "="*80)
+        print("WEB SCRAPER - INDICADORES UABC")
+        print("="*80)
+        print("\nOpciones:")
+        print("1. Extraer TODOS los datasets (12 datasets)")
+        print("2. Extraer solo datasets PRIORITARIOS (prioridad 1)")
+        print("3. Extraer datasets de PRIORIDAD 2")
+        print("4. Salir")
+
+        try:
+            opcion = input("\nSelecciona una opción (1-4): ").strip()
+        except EOFError:
+            print("\nError: No se puede ejecutar en modo interactivo sin terminal.")
+            print("Usa los argumentos de línea de comandos en su lugar.")
+            print("Ejecuta 'python scraper.py --help' para ver las opciones.")
             return
-        
-    except KeyboardInterrupt:
-        print("\n\nProceso interrumpido por el usuario")
-    except Exception as e:
-        print(f"\nError fatal: {e}")
-    finally:
-        if scraper:
-            scraper.close()
+
+        if opcion == "4":
+            print("Saliendo...")
+            return
+
+        try:
+            headless_input = input("\n¿Ejecutar en modo headless (sin ventana)? (s/n): ").strip().lower()
+            headless = headless_input == "s"
+        except EOFError:
+            headless = False
+
+        scraper = None
+        try:
+            scraper = UabcScraper(headless=headless)
+
+            if opcion == "1":
+                scraper.scrape_all()
+            elif opcion == "2":
+                scraper.scrape_priority(priority=1)
+            elif opcion == "3":
+                scraper.scrape_priority(priority=2)
+            else:
+                print("Opción no válida")
+                return
+
+        except KeyboardInterrupt:
+            print("\n\nProceso interrumpido por el usuario")
+        except Exception as e:
+            print(f"\nError fatal: {e}")
+        finally:
+            if scraper:
+                scraper.close()
+
+    # Modo con argumentos de línea de comandos
+    else:
+        print("\n" + "="*80)
+        print("WEB SCRAPER - INDICADORES UABC")
+        print("="*80)
+
+        scraper = None
+        try:
+            scraper = UabcScraper(headless=args.headless)
+
+            if args.all:
+                scraper.scrape_all()
+            elif args.priority is not None:
+                scraper.scrape_priority(priority=args.priority)
+
+        except KeyboardInterrupt:
+            print("\n\nProceso interrumpido por el usuario")
+        except Exception as e:
+            print(f"\nError fatal: {e}")
+        finally:
+            if scraper:
+                scraper.close()
 
 
 if __name__ == "__main__":
