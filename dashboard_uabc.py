@@ -221,7 +221,7 @@ if pagina == "Inicio":
 # ============================================================================
 
 elif pagina == "Limpieza de Datos":
-    st.title("📊 Reporte de Limpieza de Datos")
+    st.title("Reporte de Limpieza de Datos")
     st.markdown("---")
 
     # Cargar reportes y estadísticas
