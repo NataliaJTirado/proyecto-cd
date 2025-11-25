@@ -24,17 +24,14 @@ st.set_page_config(
 # SIDEBAR - NAVEGACIÓN
 # ============================================================================
 
-st.sidebar.title("Dashboard UABC")
-st.sidebar.markdown("---")
-
 pagina = st.sidebar.radio(
     "Navegación",
     [
         "Limpieza de Datos",
-        "Análisis Descriptivo"
+        "Análisis Descriptivo",
+        "Análisis Predictivo"
     ]
 )
-
 # ============================================================================
 # FUNCIONES AUXILIARES
 # ============================================================================
@@ -295,3 +292,154 @@ if pagina == "Limpieza de Datos":
 
 elif pagina == "Análisis Descriptivo":
     st.title(" Análisis Descriptivo")
+
+
+
+
+# ============================================================================
+# PÁGINA: ANÁLISIS PREDICTIVO
+# ============================================================================
+
+elif pagina == "Análisis Predictivo":
+    st.title("🔮 Análisis Predictivo 2025-2030")
+    st.markdown("---")
+    
+    st.markdown("""
+    ## Proyecciones de Capacidad Académica UABC
+    
+    Este análisis proyecta la evolución de la capacidad académica institucional 
+    para el periodo 2025-2030, utilizando modelos de regresión lineal sobre datos históricos.
+    """)
+    
+    # Verificar si existen las visualizaciones
+    archivos_html = [
+        "proyeccion_matricula_2025_2030.html",
+        "proyeccion_personal_academico_2025_2030.html",
+        "proyeccion_ratio_alumnos_profesor.html",
+        "proyeccion_sni_2025_2030.html",
+        "necesidades_contratacion_anual.html"
+    ]
+    
+    archivos_existen = all(os.path.exists(f) for f in archivos_html)
+    
+    if not archivos_existen:
+        st.warning("⚠️ Las visualizaciones predictivas aún no han sido generadas. Ejecuta el script `analisis_predictivo_yohali.py` primero.")
+    else:
+        # Tabs para cada proyección
+        tab1, tab2, tab3, tab4, tab5 = st.tabs([
+            "📈 Matrícula",
+            "👥 Personal Académico",
+            "📏 Ratio Alumnos-Profesor",
+            "🔬 Académicos SNI",
+            "📋 Contrataciones"
+        ])
+        
+        with tab1:
+            st.subheader("Proyección de Matrícula Estudiantil 2025-2030")
+            st.markdown("Proyección del crecimiento de la matrícula total (licenciatura + posgrado)")
+            
+            with open("proyeccion_matricula_2025_2030.html", 'r', encoding='utf-8') as f:
+                html_content = f.read()
+                st.components.v1.html(html_content, height=600, scrolling=True)
+        
+        with tab2:
+            st.subheader("Personal Académico: Tendencia vs Necesario")
+            st.markdown("Comparación entre el crecimiento proyectado con tendencia actual vs personal necesario para mantener ratios óptimos")
+            
+            with open("proyeccion_personal_academico_2025_2030.html", 'r', encoding='utf-8') as f:
+                html_content = f.read()
+                st.components.v1.html(html_content, height=600, scrolling=True)
+        
+        with tab3:
+            st.subheader("Evolución del Ratio Alumnos-Profesor")
+            st.markdown("Proyección del ratio alumnos-profesor comparado con el objetivo institucional")
+            
+            with open("proyeccion_ratio_alumnos_profesor.html", 'r', encoding='utf-8') as f:
+                html_content = f.read()
+                st.components.v1.html(html_content, height=600, scrolling=True)
+        
+        with tab4:
+            st.subheader("Proyección de Académicos en el SNI")
+            st.markdown("Crecimiento proyectado del personal académico en el Sistema Nacional de Investigadores")
+            
+            with open("proyeccion_sni_2025_2030.html", 'r', encoding='utf-8') as f:
+                html_content = f.read()
+                st.components.v1.html(html_content, height=600, scrolling=True)
+        
+        with tab5:
+            st.subheader("Plan de Contrataciones 2025-2030")
+            st.markdown("Necesidades anuales de contratación de personal académico")
+            
+            with open("necesidades_contratacion_anual.html", 'r', encoding='utf-8') as f:
+                html_content = f.read()
+                st.components.v1.html(html_content, height=600, scrolling=True)
+        
+        st.markdown("---")
+        
+        # Resumen ejecutivo
+        st.header("📊 Resumen Ejecutivo")
+        
+        # Cargar datos del CSV
+        if os.path.exists("proyecciones_2025_2030.csv"):
+            df_proyecciones = pd.read_csv("proyecciones_2025_2030.csv")
+            
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                st.metric(
+                    "Matrícula Proyectada 2030",
+                    f"{df_proyecciones['Matricula_Proyectada'].iloc[-1]:,.0f}",
+                    delta=f"+{df_proyecciones['Matricula_Proyectada'].iloc[-1] - df_proyecciones['Matricula_Proyectada'].iloc[0]:,.0f}"
+                )
+            
+            with col2:
+                st.metric(
+                    "Personal Necesario 2030",
+                    f"{df_proyecciones['Personal_Necesario'].iloc[-1]:,.0f}",
+                    delta=f"{df_proyecciones['Personal_Necesario'].iloc[-1] - df_proyecciones['Personal_Necesario'].iloc[0]:,.0f}"
+                )
+            
+            with col3:
+                st.metric(
+                    "Ratio Proyectado 2030",
+                    f"{df_proyecciones['Ratio_Proyectado'].iloc[-1]:.1f}:1"
+                )
+            
+            st.markdown("---")
+            
+            st.subheader("Tabla de Proyecciones Completas")
+            st.dataframe(df_proyecciones, use_container_width=True, hide_index=True)
+            
+            # Descarga
+            csv = df_proyecciones.to_csv(index=False, encoding='utf-8-sig')
+            st.download_button(
+                label="📥 Descargar proyecciones (CSV)",
+                data=csv,
+                file_name="proyecciones_2025_2030.csv",
+                mime="text/csv"
+            )
+        
+        st.markdown("---")
+        
+        # Validación de Hipótesis H5
+        st.header("🎯 Validación de Hipótesis H5")
+        
+        st.markdown("""
+        **Hipótesis H5:** Si las tendencias actuales continúan, la UABC necesitará 
+        incrementar su planta docente en al menos un 15% para 2030 para mantener ratios óptimos.
+        
+        **Resultado:** ✗ La hipótesis se **RECHAZA**
+        
+        **Análisis:** Las proyecciones muestran que la UABC cuenta actualmente con un 
+        ratio alumnos-profesor de 10.9:1, significativamente mejor que el estándar 
+        recomendado de 12:1. Para 2030, el ratio proyectado será de 11.4:1, que sigue 
+        siendo excelente.
+        
+        **Conclusión:** Este hallazgo revela una fortaleza institucional - la UABC ha 
+        logrado mantener una planta docente robusta que permite atención de calidad.
+        """)
+
+
+
+
+
