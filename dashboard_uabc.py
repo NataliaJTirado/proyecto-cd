@@ -10,6 +10,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import os
 import glob
+import re
 from pathlib import Path
 
 # ============================================================================
@@ -37,9 +38,16 @@ def cargar_reportes():
         return {}
 
     for archivo in glob.glob(f"{reportes_path}/*_reporte.txt"):
-        nombre = os.path.basename(archivo).replace("_reporte.txt", "")
+        nombre_completo = os.path.basename(archivo).replace("_reporte.txt", "")
+        # Limpiar nombre del dataset (quitar timestamp _YYYYMMDD_HHMMSS)
+        nombre_limpio = re.sub(r'_\d{8}_\d{6}$', '', nombre_completo)
+
         with open(archivo, 'r', encoding='utf-8') as f:
-            reportes[nombre] = f.read()
+            # Usar nombre limpio como clave, pero guardar también el nombre completo
+            reportes[nombre_limpio] = {
+                'contenido': f.read(),
+                'nombre_completo': nombre_completo
+            }
 
     return reportes
 
@@ -83,8 +91,12 @@ def obtener_estadisticas_datasets():
             except:
                 pass
 
+        # Limpiar nombre del dataset (quitar timestamp _YYYYMMDD_HHMMSS)
+        nombre_limpio = re.sub(r'_\d{8}_\d{6}$', '', nombre_base)
+        nombre_display = nombre_limpio.replace('_', ' ')
+
         stats.append({
-            'Dataset': nombre_base.replace('_', ' '),
+            'Dataset': nombre_display,
             'Filas Originales': filas_raw,
             'Filas Limpias': len(df_limpio),
             'Filas Removidas': filas_raw - len(df_limpio),
@@ -302,14 +314,18 @@ elif pagina == "Limpieza de Datos":
             if dataset_seleccionado:
                 st.subheader(f"Reporte: {dataset_seleccionado.replace('_', ' ')}")
 
+                # Obtener información del reporte
+                nombre_completo = reportes[dataset_seleccionado]['nombre_completo']
+                contenido_reporte = reportes[dataset_seleccionado]['contenido']
+
                 # Mostrar reporte en un contenedor
                 with st.expander("Ver reporte completo", expanded=True):
-                    st.text(reportes[dataset_seleccionado])
+                    st.text(contenido_reporte)
 
                 # Mostrar vista previa de datos
                 st.subheader("Vista Previa de Datos Limpios")
 
-                archivo_csv = f"downloads/processed/{dataset_seleccionado}_limpio.csv"
+                archivo_csv = f"downloads/processed/{nombre_completo}_limpio.csv"
                 if os.path.exists(archivo_csv):
                     df = pd.read_csv(archivo_csv)
 
@@ -381,10 +397,6 @@ elif pagina == "Limpieza de Datos":
         # ============================================================
         # INFORMACIÓN ADICIONAL
         # ============================================================
-        st.info("""
-        **Nota:** Los datos limpios están disponibles en formato CSV y Excel en la carpeta `downloads/processed/`.
-        Los reportes detallados se encuentran en `downloads/reportes/`.
-        """)
 
 # ============================================================================
 # PÁGINA: DATOS LIMPIOS
