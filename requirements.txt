@@ -1,22 +1,8 @@
-# Requirements para Dashboard Streamlit - UABC
+# Requirements para Streamlit Cloud - UABC Dashboard
+# Versiones probadas y compatibles
 
-# Framework principal
-streamlit==1.29.0
-
-# Manipulación de datos
-pandas==2.1.3
-numpy==1.26.2
-openpyxl==3.1.2
-
-# Visualización
-plotly==5.18.0
-matplotlib==3.8.2
-seaborn==0.13.0
-
-# Análisis estadístico
-scipy==1.11.4
-scikit-learn==1.3.2
-statsmodels==0.14.1
-
-# Utilidades
-python-dateutil==2.8.2
+streamlit>=1.28.0
+pandas>=2.0.0
+numpy>=1.24.0
+openpyxl>=3.1.0
+plotly>=5.17.0
