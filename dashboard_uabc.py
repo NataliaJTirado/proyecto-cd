@@ -12,8 +12,9 @@ import os
 import glob
 import re
 from pathlib import Path
+from scipy.stats import pearsonr, f_oneway
 
-# ============================================================================
+# ============================================================================ 
 # CONFIGURACIÓN DE LA PÁGINA
 # ============================================================================
 
@@ -24,7 +25,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ============================================================================
+# ============================================================================ 
 # FUNCIONES AUXILIARES
 # ============================================================================
 
@@ -107,7 +108,7 @@ def obtener_estadisticas_datasets():
 
     return pd.DataFrame(stats)
 
-# ============================================================================
+# ============================================================================ 
 # FUNCIONES PARA CARGA DE DATOS (para páginas de análisis)
 # ============================================================================
 
@@ -123,7 +124,14 @@ def cargar(patron):
 
 def extraer_anio(periodo):
     """Función para extraer año del periodo (2018-2 -> 2018)"""
-    return int(str(periodo).split('-')[0])
+    try:
+        return int(str(periodo).split('-')[0])
+    except:
+        # si no sigue ese patrón, intentar convertir directo a int si es posible
+        try:
+            return int(periodo)
+        except:
+            return None
 
 # Intentar cargar archivos (solo si existen)
 try:
@@ -135,10 +143,12 @@ try:
     programas_pos = cargar("Programas_Posgrado_Historico")
     ratio = cargar("Relacion_AlumnosProfesor_UnidadAcademica")
     datos_cargados = True
-except:
+except Exception:
+    # si falla cualquier lectura, marcar como no cargado para mostrar mensajes
+    alumnos_lic = alumnos_pos = docentes_hist = sni_hist = programas_lic = programas_pos = ratio = None
     datos_cargados = False
 
-# ============================================================================
+# ============================================================================ 
 # SIDEBAR - NAVEGACIÓN
 # ============================================================================
 
@@ -152,11 +162,12 @@ pagina = st.sidebar.radio(
         "Limpieza de Datos",
         "Datos Limpios",
         "Análisis Descriptivo",
+        "Analisis Inferencial",      # <-- sección nueva (sin tilde, tal como pediste)
         "Análisis Predictivo"
     ]
 )
 
-# ============================================================================
+# ============================================================================ 
 # PÁGINA: INICIO
 # ============================================================================
 
@@ -189,11 +200,18 @@ if pagina == "Inicio":
 
     with col4:
         if datos_cargados and sni_hist is not None:
-            st.metric(
-                label="🔬 SNI",
-                value=f"{sni_hist['recuento'].iloc[-1]}",
-                delta=f"+{sni_hist['recuento'].iloc[-1] - sni_hist['recuento'].iloc[0]} desde 2018"
-            )
+            try:
+                st.metric(
+                    label="🔬 SNI",
+                    value=f"{sni_hist['recuento'].iloc[-1]}",
+                    delta=f"+{sni_hist['recuento'].iloc[-1] - sni_hist['recuento'].iloc[0]} desde 2018"
+                )
+            except Exception:
+                st.metric(
+                    label="🔬 SNI",
+                    value="N/A",
+                    delta="Datos no disponibles"
+                )
         else:
             st.metric(
                 label="🔬 SNI",
@@ -209,14 +227,14 @@ if pagina == "Inicio":
 
     1. **¿Cuál ha sido la tasa de crecimiento anual de la matrícula en los últimos 6 años?**
     2. **¿Cómo se distribuye actualmente el personal académico por tipo de contratación?**
-    3. **¿Qué unidades académicas tienen el mayor/menor ratio alumnos-profesor?**
-    4. **¿Cuál ha sido la evolución de los académicos en el SNI?**
-    5. **¿Cómo ha crecido el número de programas educativos acreditados?**
+    3. **Qué unidades académicas tienen el mayor/menor ratio alumnos-profesor?**
+    4. **Cuál ha sido la evolución de los académicos en el SNI?**
+    5. **Cómo ha crecido el número de programas educativos acreditados?**
 
     ---
     """)
 
-# ============================================================================
+# ============================================================================ 
 # PÁGINA: LIMPIEZA DE DATOS
 # ============================================================================
 
@@ -394,11 +412,7 @@ elif pagina == "Limpieza de Datos":
 
         st.markdown("---")
 
-        # ============================================================
-        # INFORMACIÓN ADICIONAL
-        # ============================================================
-
-# ============================================================================
+# ============================================================================ 
 # PÁGINA: DATOS LIMPIOS
 # ============================================================================
 
@@ -483,7 +497,7 @@ elif pagina == "Datos Limpios":
                     mime="text/csv"
                 )
 
-# ============================================================================
+# ============================================================================ 
 # PÁGINA: ANÁLISIS DESCRIPTIVO
 # ============================================================================
 
@@ -504,26 +518,33 @@ elif pagina == "Análisis Descriptivo":
         if alumnos_lic is not None and alumnos_pos is not None:
             # Preparar datos de licenciatura
             alumnos_lic['año'] = alumnos_lic['periodo'].apply(extraer_anio)
-            lic_anual = alumnos_lic.groupby('año')['recuento'].sum().reset_index()
-            lic_anual['crecimiento_%'] = lic_anual['recuento'].pct_change() * 100
+            # usar columna 'recuento' si existe, si no usar 'recuento_alumnos_de_licenciatura'
+            col_lic = 'recuento' if 'recuento' in alumnos_lic.columns else 'recuento_alumnos_de_licenciatura'
+            lic_anual = alumnos_lic.groupby('año')[col_lic].sum().reset_index()
+            lic_anual['crecimiento_%'] = lic_anual[col_lic].pct_change() * 100
             
             # Preparar datos de posgrado
             alumnos_pos['año'] = alumnos_pos['periodo'].apply(extraer_anio)
-            pos_anual = alumnos_pos.groupby('año')['recuento'].sum().reset_index()
-            pos_anual['crecimiento_%'] = pos_anual['recuento'].pct_change() * 100
+            col_pos = 'recuento' if 'recuento' in alumnos_pos.columns else 'uabc' if 'uabc' in alumnos_pos.columns else None
+            if col_pos is None:
+                pos_anual = pd.DataFrame({'año': [], 'recuento': []})
+            else:
+                pos_anual = alumnos_pos.groupby('año')[col_pos].sum().reset_index()
+                pos_anual['crecimiento_%'] = pos_anual[col_pos].pct_change() * 100
             
             # Gráfico 1: Evolución de matrícula
             fig1 = go.Figure()
             fig1.add_trace(go.Scatter(
-                x=lic_anual['año'], y=lic_anual['recuento'],
+                x=lic_anual['año'], y=lic_anual[col_lic],
                 mode='lines+markers', name='Licenciatura',
                 line=dict(color='blue', width=3)
             ))
-            fig1.add_trace(go.Scatter(
-                x=pos_anual['año'], y=pos_anual['recuento'],
-                mode='lines+markers', name='Posgrado',
-                line=dict(color='green', width=3)
-            ))
+            if not pos_anual.empty:
+                fig1.add_trace(go.Scatter(
+                    x=pos_anual['año'], y=pos_anual[col_pos],
+                    mode='lines+markers', name='Posgrado',
+                    line=dict(color='green', width=3)
+                ))
             fig1.update_layout(
                 title='Evolución de la Matrícula (2018-2025)',
                 xaxis_title='Año',
@@ -534,12 +555,14 @@ elif pagina == "Análisis Descriptivo":
             
             # Gráfico 2: Tasa de crecimiento
             fig2 = go.Figure()
-            fig2.add_trace(go.Bar(
-                x=lic_anual['año'][1:], y=lic_anual['crecimiento_%'][1:], name='Licenciatura'
-            ))
-            fig2.add_trace(go.Bar(
-                x=pos_anual['año'][1:], y=pos_anual['crecimiento_%'][1:], name='Posgrado'
-            ))
+            if len(lic_anual) > 1:
+                fig2.add_trace(go.Bar(
+                    x=lic_anual['año'][1:], y=lic_anual['crecimiento_%'][1:], name='Licenciatura'
+                ))
+            if not pos_anual.empty and len(pos_anual) > 1:
+                fig2.add_trace(go.Bar(
+                    x=pos_anual['año'][1:], y=pos_anual['crecimiento_%'][1:], name='Posgrado'
+                ))
             fig2.update_layout(
                 title='Tasa de Crecimiento Anual (%)',
                 xaxis_title='Año',
@@ -581,27 +604,36 @@ elif pagina == "Análisis Descriptivo":
         
         if ratio is not None:
             ratio_clean = ratio.copy()
-            ratio_clean.columns = ['campus', 'unidad_academica', 'ratio_licenciatura', 'ratio_posgrado']
-            ratio_clean['nombre_completo'] = ratio_clean['campus'] + ' - ' + ratio_clean['unidad_academica']
-            ratio_clean = ratio_clean.sort_values('ratio_licenciatura', ascending=True)
+            # asegurar nombres esperados
+            try:
+                ratio_clean.columns = ['campus', 'unidad_academica', 'ratio_licenciatura', 'ratio_posgrado']
+            except Exception:
+                # si no coincide, intentar mantener lo que haya
+                pass
+            if 'ratio_licenciatura' in ratio_clean.columns:
+                ratio_clean['nombre_completo'] = ratio_clean['campus'] + ' - ' + ratio_clean['unidad_academica']
+                ratio_clean = ratio_clean.sort_values('ratio_licenciatura', ascending=True)
             
-            fig4 = go.Figure()
-            fig4.add_trace(go.Bar(
-                y=ratio_clean['nombre_completo'], x=ratio_clean['ratio_licenciatura'],
-                orientation='h', name='Licenciatura'
-            ))
-            fig4.add_trace(go.Bar(
-                y=ratio_clean['nombre_completo'], x=ratio_clean['ratio_posgrado'],
-                orientation='h', name='Posgrado'
-            ))
-            fig4.update_layout(
-                title='Ratio Alumnos-Profesor por Unidad Académica',
-                xaxis_title='Ratio (Alumnos por Profesor)',
-                yaxis_title='Unidad Académica',
-                barmode='group',
-                height=800
-            )
-            st.plotly_chart(fig4, use_container_width=True)
+                fig4 = go.Figure()
+                fig4.add_trace(go.Bar(
+                    y=ratio_clean['nombre_completo'], x=ratio_clean['ratio_licenciatura'],
+                    orientation='h', name='Licenciatura'
+                ))
+                if 'ratio_posgrado' in ratio_clean.columns:
+                    fig4.add_trace(go.Bar(
+                        y=ratio_clean['nombre_completo'], x=ratio_clean['ratio_posgrado'],
+                        orientation='h', name='Posgrado'
+                    ))
+                fig4.update_layout(
+                    title='Ratio Alumnos-Profesor por Unidad Académica',
+                    xaxis_title='Ratio (Alumnos por Profesor)',
+                    yaxis_title='Unidad Académica',
+                    barmode='group',
+                    height=800
+                )
+                st.plotly_chart(fig4, use_container_width=True)
+            else:
+                st.warning("El dataset de ratios no tiene la estructura esperada.")
         else:
             st.warning("Datos de ratio alumnos-profesor no disponibles")
         
@@ -639,14 +671,26 @@ elif pagina == "Análisis Descriptivo":
             programas_pos['año'] = programas_pos['periodo'].apply(extraer_anio)
             
             fig6 = go.Figure()
-            fig6.add_trace(go.Scatter(
-                x=programas_lic['periodo'], y=programas_lic.iloc[:, 1],
-                mode='lines+markers', name='Licenciatura'
-            ))
-            fig6.add_trace(go.Scatter(
-                x=programas_pos['periodo'], y=programas_pos.iloc[:, 1],
-                mode='lines+markers', name='Posgrado'
-            ))
+            # intentar usar la segunda columna como conteo (como en tu código original)
+            try:
+                y_lic = programas_lic.iloc[:, 1]
+            except:
+                y_lic = None
+            try:
+                y_pos = programas_pos.iloc[:, 1]
+            except:
+                y_pos = None
+
+            if y_lic is not None:
+                fig6.add_trace(go.Scatter(
+                    x=programas_lic['periodo'], y=y_lic,
+                    mode='lines+markers', name='Licenciatura'
+                ))
+            if y_pos is not None:
+                fig6.add_trace(go.Scatter(
+                    x=programas_pos['periodo'], y=y_pos,
+                    mode='lines+markers', name='Posgrado'
+                ))
             fig6.update_layout(
                 title='Evolución de Programas Educativos',
                 xaxis_title='Periodo',
@@ -656,7 +700,251 @@ elif pagina == "Análisis Descriptivo":
         else:
             st.warning("Datos de programas educativos no disponibles")
 
+# ============================================================================ 
+# PÁGINA: ANALISIS INFERENCIAL  (insertada entre descriptivo y predictivo)
 # ============================================================================
+
+elif pagina == "Analisis Inferencial":
+    st.title("🔍 Analisis Inferencial")
+
+    st.markdown("""
+    Esta sección presenta **análisis estadísticos** para probar hipótesis y determinar relaciones significativas entre variables clave de la capacidad académica institucional.
+    **Nivel de significancia:** α = 0.05 (95% de confianza)
+    """)
+    st.markdown("---")
+
+    # Verificar que existan los datasets necesarios
+    if alumnos_lic is None or docentes_hist is None:
+        st.warning("⚠️ No hay datos suficientes para realizar análisis inferencial. Asegúrate de que los archivos procesados existen en 'downloads/processed'.")
+    else:
+        # Preparar datos por año
+        alumnos_lic['año'] = alumnos_lic['periodo'].apply(extraer_anio)
+        docentes_hist['año'] = docentes_hist['periodo'].apply(extraer_anio)
+
+        # seleccionar columna correcta para matrícula licenciatura
+        if 'recuento_alumnos_de_licenciatura' in alumnos_lic.columns:
+            col_lic_infer = 'recuento_alumnos_de_licenciatura'
+        elif 'recuento' in alumnos_lic.columns:
+            col_lic_infer = 'recuento'
+        else:
+            # intentar primera columna numérica
+            numeric_cols = alumnos_lic.select_dtypes(include=['number']).columns.tolist()
+            col_lic_infer = numeric_cols[0] if numeric_cols else None
+
+        # seleccionar columna correcta para personal académico
+        if 'recuento' in docentes_hist.columns:
+            col_doc_infer = 'recuento'
+        else:
+            numeric_cols_doc = docentes_hist.select_dtypes(include=['number']).columns.tolist()
+            col_doc_infer = numeric_cols_doc[0] if numeric_cols_doc else None
+
+        if col_lic_infer is None or col_doc_infer is None:
+            st.error("No se encontraron columnas numéricas adecuadas para matrícula o personal en los datasets.")
+        else:
+            # Agrupar por año
+            lic_por_anio = alumnos_lic.groupby('año')[col_lic_infer].mean().reset_index()
+            personal_por_anio = docentes_hist.groupby('año')[col_doc_infer].mean().reset_index()
+
+            # Asegurar que las series tengan el mismo rango de años para correlación
+            merged = pd.merge(lic_por_anio, personal_por_anio, on='año', how='inner', suffixes=('_lic', '_doc'))
+            if merged.empty or len(merged) < 2:
+                st.info("No hay suficientes puntos (años) emparejados para calcular correlación.")
+            else:
+                # Tabs de análisis
+                tab1, tab2, tab3 = st.tabs([
+                    "📈 Matrícula vs Académicos",
+                    "🏫 Ratios Campus",
+                    "⏰ Desfases"
+                ])
+
+                # ==============================================================
+                # TAB 1: MATRÍCULA VS PERSONAL ACADÉMICO
+                # ==============================================================
+                with tab1:
+                    st.header("📈 Correlación: Matrícula vs Personal Académico")
+
+                    st.markdown("""
+                    **Pregunta:** ¿Existe correlación significativa entre crecimiento de matrícula y personal académico?
+                    **Hipótesis H1:** La matrícula ha crecido más que el personal académico.
+                    """)
+
+                    # Calcular correlación usando las series emparejadas
+                    x = merged[col_lic_infer + '_lic'] if (col_lic_infer + '_lic') in merged.columns else merged[col_lic_infer]
+                    y = merged[col_doc_infer + '_doc'] if (col_doc_infer + '_doc') in merged.columns else merged[col_doc_infer]
+
+                    try:
+                        r, p_value = pearsonr(x.astype(float), y.astype(float))
+                    except Exception:
+                        r, p_value = float('nan'), float('nan')
+
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.metric("Correlación (r)", f"{r:.4f}" if pd.notna(r) else "N/A")
+                    with col2:
+                        st.metric("P-value", f"{p_value:.4f}" if pd.notna(p_value) else "N/A")
+                    with col3:
+                        if pd.notna(p_value):
+                            st.metric("Resultado", "✅ SIGNIFICATIVO" if p_value < 0.05 else "❌ NO SIGNIFICATIVO")
+                        else:
+                            st.metric("Resultado", "N/A")
+
+                    # Interpretación
+                    if pd.notna(r):
+                        if abs(r) < 0.3:
+                            fuerza = "débil"
+                        elif abs(r) < 0.7:
+                            fuerza = "moderada"
+                        else:
+                            fuerza = "fuerte"
+                        st.info(f"""
+                        **Interpretación:** La correlación entre matrícula y personal académico es **{fuerza}** (r = {r:.4f}).  
+                        Con un p-value de {p_value:.4f}, esta relación {'**ES significativa**' if p_value < 0.05 else '**NO es significativa**'} al 95%.
+                        """)
+                    else:
+                        st.info("No fue posible calcular la correlación con los datos disponibles.")
+
+                    # Gráfico de dispersión con línea de tendencia
+                    fig = px.scatter(
+                        merged,
+                        x=x.name,
+                        y=y.name,
+                        labels={'x': 'Matrícula Licenciatura', 'y': 'Personal Académico'},
+                        title='Relación Matrícula vs Personal Académico',
+                        trendline="ols"
+                    )
+                    fig.update_traces(marker=dict(size=12))
+                    st.plotly_chart(fig, use_container_width=True)
+
+                    # Tasas de crecimiento (usar primer y último año disponibles)
+                    try:
+                        tasa_crecimiento_alumnos = ((merged[x.name].iloc[-1] / merged[x.name].iloc[0]) - 1) * 100
+                        tasa_crecimiento_personal = ((merged[y.name].iloc[-1] / merged[y.name].iloc[0]) - 1) * 100
+                    except Exception:
+                        tasa_crecimiento_alumnos = tasa_crecimiento_personal = float('nan')
+
+                    st.markdown("---")
+                    st.subheader("📊 Tasas de Crecimiento Comparadas")
+
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.metric("Crecimiento Matrícula (primer-último)", f"{tasa_crecimiento_alumnos:.2f}%" if pd.notna(tasa_crecimiento_alumnos) else "N/A")
+                    with col2:
+                        st.metric("Crecimiento Personal (primer-último)", f"{tasa_crecimiento_personal:.2f}%" if pd.notna(tasa_crecimiento_personal) else "N/A")
+
+                    if pd.notna(tasa_crecimiento_alumnos) and pd.notna(tasa_crecimiento_personal):
+                        if tasa_crecimiento_alumnos > tasa_crecimiento_personal:
+                            st.warning(f"""
+                            ⚠️ **Hallazgo:** La matrícula creció **{tasa_crecimiento_alumnos:.2f}%** 
+                            vs **{tasa_crecimiento_personal:.2f}%** de personal.
+                            Se confirma la hipótesis H1.
+                            """)
+                        else:
+                            st.success("✅ El personal creció proporcionalmente a la matrícula.")
+                    else:
+                        st.info("No hay suficientes datos para comparar tasas de crecimiento.")
+
+                # ==============================================================
+                # TAB 2: ANOVA ENTRE CAMPUS
+                # ==============================================================
+                with tab2:
+                    st.header("🏫 ANOVA: Ratios entre Campus")
+
+                    if ratio is None:
+                        st.info("No hay datos de ratio disponibles para este análisis.")
+                    else:
+                        ratio_clean = ratio.copy()
+                        # intentar normalizar nombres de columnas esperadas
+                        try:
+                            ratio_clean.columns = ['campus', 'unidad_academica', 'ratio_licenciatura', 'ratio_posgrado']
+                        except Exception:
+                            pass
+
+                        if 'ratio_licenciatura' not in ratio_clean.columns:
+                            st.warning("El dataset de ratios no tiene la columna 'ratio_licenciatura' esperada.")
+                        else:
+                            # Preparar grupos
+                            grupos_campus = []
+                            nombres_campus = ratio_clean['campus'].unique()
+
+                            for campus in nombres_campus:
+                                datos = ratio_clean[ratio_clean['campus'] == campus]['ratio_licenciatura'].dropna()
+                                if len(datos) > 0:
+                                    grupos_campus.append(datos.astype(float))
+
+                            if len(grupos_campus) >= 2:
+                                try:
+                                    f_stat, p_anova = f_oneway(*grupos_campus)
+                                except Exception:
+                                    f_stat, p_anova = float('nan'), float('nan')
+
+                                col1, col2, col3 = st.columns(3)
+                                with col1:
+                                    st.metric("F-estadístico", f"{f_stat:.4f}" if pd.notna(f_stat) else "N/A")
+                                with col2:
+                                    st.metric("P-value", f"{p_anova:.4f}" if pd.notna(p_anova) else "N/A")
+                                with col3:
+                                    if pd.notna(p_anova):
+                                        st.metric("Resultado", "✅ HAY DIFERENCIAS" if p_anova < 0.05 else "❌ NO HAY DIFERENCIAS")
+                                    else:
+                                        st.metric("Resultado", "N/A")
+
+                                # Boxplot
+                                fig_box = px.box(
+                                    ratio_clean,
+                                    x='campus',
+                                    y='ratio_licenciatura',
+                                    color='campus',
+                                    title='Distribución de Ratios por Campus'
+                                )
+                                st.plotly_chart(fig_box, use_container_width=True)
+
+                                # Tabla
+                                st.subheader("📊 Estadísticas por Campus")
+                                stats_campus = ratio_clean.groupby('campus')['ratio_licenciatura'].agg(
+                                    ['mean', 'median', 'std', 'min', 'max']
+                                )
+                                st.dataframe(stats_campus, use_container_width=True)
+                            else:
+                                st.info("No hay suficientes grupos para realizar ANOVA.")
+
+                # ==============================================================
+                # TAB 3: DESFASES TEMPORALES
+                # ==============================================================
+                with tab3:
+                    st.header("⏰ Desfases Temporales")
+
+                    fig_series = make_subplots(specs=[[{"secondary_y": True}]])
+                    fig_series.add_trace(
+                        go.Scatter(x=merged['año'], y=merged[x.name], name='Matrícula'),
+                        secondary_y=False
+                    )
+                    fig_series.add_trace(
+                        go.Scatter(x=merged['año'], y=merged[y.name], name='Personal Académico'),
+                        secondary_y=True
+                    )
+
+                    fig_series.update_layout(title="Evolución Temporal: Matrícula vs Personal", height=500)
+                    st.plotly_chart(fig_series, use_container_width=True)
+
+                # ==============================================================
+                # RESUMEN FINAL
+                # ==============================================================
+                st.markdown("---")
+                st.subheader("📋 Resumen de Resultados")
+
+                resumen = pd.DataFrame({
+                    'Análisis': ['Matrícula vs Académicos', 'Ratios entre Campus'],
+                    'Correlación/F-stat': [f"r = {r:.4f}" if pd.notna(r) else 'N/A', f"F = {f_stat:.4f}" if 'f_stat' in locals() and pd.notna(f_stat) else 'N/A'],
+                    'P-value': [f"{p_value:.4f}" if pd.notna(p_value) else 'N/A', f"{p_anova:.4f}" if 'p_anova' in locals() and pd.notna(p_anova) else 'N/A'],
+                    'Resultado': [
+                        '✅ Significativo' if pd.notna(p_value) and p_value < 0.05 else '❌ No significativo' if pd.notna(p_value) else 'N/A',
+                        '✅ Hay diferencias' if ('p_anova' in locals() and pd.notna(p_anova) and p_anova < 0.05) else '❌ No hay diferencias' if 'p_anova' in locals() and pd.notna(p_anova) else 'N/A'
+                    ]
+                })
+
+                st.dataframe(resumen, use_container_width=True, hide_index=True)
+
+# ============================================================================ 
 # PÁGINA: ANÁLISIS PREDICTIVO
 # ============================================================================
 
@@ -774,7 +1062,7 @@ elif pagina == "Análisis Predictivo":
         **Conclusión:** La UABC ha logrado mantener una planta docente robusta.
         """)
 
-# ============================================================================
+# ============================================================================ 
 # FOOTER
 # ============================================================================
 
