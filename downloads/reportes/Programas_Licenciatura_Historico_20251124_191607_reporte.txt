@@ -1,4 +1,4 @@
-REPORTE DE CALIDAD: Personal_SNI_Historico_20251124_125859
+REPORTE DE CALIDAD: Programas_Licenciatura_Historico_20251124_191607
 ================================================================================
 
 Filas: 13
@@ -6,5 +6,5 @@ Columnas: 3
 
 Columnas:
   - periodo (object)
-  - recuento (int64)
+  - recuento_programas_educativos_de_licenciatura (int64)
   - fecha (int64)

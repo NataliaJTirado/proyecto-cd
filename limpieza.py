@@ -101,7 +101,7 @@ def remover_filas_vacias(df, umbral=0.5):
     
     filas_removidas = len(df) - len(df_limpio)
     if filas_removidas > 0:
-        print(f"[OK] Removidas {filas_removidas} filas vacías")
+        print(f"✓ Removidas {filas_removidas} filas vacías")
     
     return df_limpio
 
@@ -129,7 +129,7 @@ def remover_columnas_vacias(df, umbral=0.5):
     
     columnas_removidas = len(df.columns) - len(df_limpio.columns)
     if columnas_removidas > 0:
-        print(f"[OK] Removidas {columnas_removidas} columnas vacías")
+        print(f"✓ Removidas {columnas_removidas} columnas vacías")
     
     return df_limpio
 
@@ -182,33 +182,32 @@ def limpiar_periodos(df, columna_periodo='periodo'):
 def agregar_columna_fecha(df, columna_periodo='periodo'):
     """
     Agrega columna de fecha basada en el periodo académico
-
+    
     Args:
         df (pd.DataFrame): DataFrame con columna de periodo
         columna_periodo (str): Nombre de la columna de periodo
-
+        
     Returns:
         pd.DataFrame: DataFrame con columna 'fecha' agregada
     """
     df = df.copy()
-
+    
     if columna_periodo not in df.columns:
         print(f"  Columna '{columna_periodo}' no encontrada")
         return df
-
+    
     def periodo_a_fecha(periodo):
-        """Convierte periodo (ej: 2018-2) a fecha en formato YYYY-MM-DD"""
+        """Convierte periodo (ej: 2018-2) a fecha"""
         try:
-            año, semestre = str(periodo).split('-')
+            año, semestre = periodo.split('-')
             # Semestre 1 = Enero, Semestre 2 = Julio
             mes = '01' if semestre == '1' else '07'
-            # Retornar como string en formato ISO
-            return f"{año}-{mes}-01"
+            return pd.to_datetime(f"{año}-{mes}-01")
         except:
-            return None
-
+            return pd.NaT
+    
     df['fecha'] = df[columna_periodo].apply(periodo_a_fecha)
-
+    
     return df
 
 
@@ -282,14 +281,14 @@ def validar_rango_valores(df, columna, min_val=None, max_val=None,
         
         elif accion == 'remover':
             df = df[~fuera_rango].copy()
-            print(f"[OK] Removidas {n_invalidos} filas con valores fuera de rango")
+            print(f"✓ Removidas {n_invalidos} filas con valores fuera de rango")
         
         elif accion == 'corregir':
             if min_val is not None:
                 df.loc[df[columna] < min_val, columna] = min_val
             if max_val is not None:
                 df.loc[df[columna] > max_val, columna] = max_val
-            print(f"[OK] Corregidos {n_invalidos} valores fuera de rango")
+            print(f"✓ Corregidos {n_invalidos} valores fuera de rango")
     
     return df
 
@@ -314,7 +313,7 @@ def detectar_duplicados(df, subset=None):
         print(f"  {n_duplicados} filas duplicadas encontradas")
         df['es_duplicado'] = duplicados
     else:
-        print("[OK] No se encontraron duplicados")
+        print("✓ No se encontraron duplicados")
     
     return df
 
@@ -337,7 +336,7 @@ def remover_duplicados(df, subset=None, keep='first'):
     
     removidos = df_antes - df_despues
     if removidos > 0:
-        print(f"[OK] Removidas {removidos} filas duplicadas")
+        print(f"✓ Removidas {removidos} filas duplicadas")
     
     return df
 
@@ -354,7 +353,7 @@ def limpiar_alumnos_historico(df):
     Returns:
         pd.DataFrame: DataFrame limpio
     """
-    print("\n[Alumnos] Limpiando datos de alumnos...")
+    print("\n📊 Limpiando datos de alumnos...")
     
     # 1. Limpiar nombres de columnas
     df = limpiar_nombres_columnas(df)
@@ -384,7 +383,7 @@ def limpiar_alumnos_historico(df):
     # 8. Ordenar por periodo
     df = df.sort_values('periodo').reset_index(drop=True)
     
-    print("[OK] Limpieza completada\n")
+    print("✓ Limpieza completada\n")
     
     return df
 
@@ -399,7 +398,7 @@ def limpiar_personal_historico(df):
     Returns:
         pd.DataFrame: DataFrame limpio
     """
-    print("\n[Personal] Limpiando datos de personal academico...")
+    print("\n👨‍🏫 Limpiando datos de personal académico...")
     
     # Aplicar limpieza similar a alumnos
     df = limpiar_nombres_columnas(df)
@@ -418,7 +417,7 @@ def limpiar_personal_historico(df):
     df = remover_duplicados(df, subset=['periodo'])
     df = df.sort_values('periodo').reset_index(drop=True)
     
-    print("[OK] Limpieza completada\n")
+    print("✓ Limpieza completada\n")
     
     return df
 
@@ -433,7 +432,7 @@ def limpiar_cuerpos_academicos(df):
     Returns:
         pd.DataFrame: DataFrame limpio
     """
-    print("\n[Cuerpos] Limpiando datos de cuerpos academicos...")
+    print("\n🔬 Limpiando datos de cuerpos académicos...")
     
     df = limpiar_nombres_columnas(df)
     
@@ -453,7 +452,7 @@ def limpiar_cuerpos_academicos(df):
     df = remover_filas_vacias(df)
     df = remover_columnas_vacias(df)
     
-    print("[OK] Limpieza completada\n")
+    print("✓ Limpieza completada\n")
     
     return df
 
@@ -468,7 +467,7 @@ def limpiar_relacion_alumnos_profesor(df):
     Returns:
         pd.DataFrame: DataFrame limpio
     """
-    print("\n[Relacion] Limpiando datos de relacion alumnos-profesor...")
+    print("\n Limpiando datos de relación alumnos-profesor...")
     
     df = limpiar_nombres_columnas(df)
     df = detectar_y_convertir_tipos(df)
@@ -482,7 +481,7 @@ def limpiar_relacion_alumnos_profesor(df):
     
     df = remover_duplicados(df)
     
-    print("[OK] Limpieza completada\n")
+    print("✓ Limpieza completada\n")
     
     return df
 
@@ -502,7 +501,7 @@ def limpiar_dataset_sin_periodo(df):
     
     # Manejar MultiIndex en columnas si existe
     if isinstance(df.columns, pd.MultiIndex):
-        print("   -> Aplanando MultiIndex en columnas...")
+        print("   → Aplanando MultiIndex en columnas...")
         # Convertir MultiIndex a nombres simples
         df.columns = ['_'.join(map(str, col)).strip() for col in df.columns.values]
     
@@ -519,7 +518,7 @@ def limpiar_dataset_sin_periodo(df):
     
     df = remover_duplicados(df)
     
-    print("[OK] Limpieza completada\n")
+    print("✓ Limpieza completada\n")
     
     return df
 
@@ -674,7 +673,7 @@ def imprimir_reporte_calidad(reporte):
     if reporte['filas_duplicadas'] > 0:
         print(f"\n  DUPLICADOS: {reporte['filas_duplicadas']} filas")
     else:
-        print(f"\n[OK] SIN DUPLICADOS")
+        print(f"\n✓ SIN DUPLICADOS")
     
     print(f"\n MEMORIA: {reporte['memoria_mb']:.2f} MB")
     print("="*60 + "\n")

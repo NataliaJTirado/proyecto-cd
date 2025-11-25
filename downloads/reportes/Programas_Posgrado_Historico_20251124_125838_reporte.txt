@@ -9,4 +9,4 @@ Columnas:
   - especialidad (int64)
   - maestra (int64)
   - doctorado (int64)
-  - fecha (object)
+  - fecha (int64)
