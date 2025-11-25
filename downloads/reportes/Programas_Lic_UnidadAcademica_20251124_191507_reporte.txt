@@ -1,0 +1,12 @@
+REPORTE DE CALIDAD: Programas_Lic_UnidadAcademica_20251124_191507
+================================================================================
+
+Filas: 40
+Columnas: 5
+
+Columnas:
+  - campus_campus (object)
+  - unidad_acadmica_unidad_acadmica (object)
+  - no_presencial_unnamed_2_level_1 (int64)
+  - presencial_unnamed_3_level_1 (int64)
+  - uabc_unnamed_4_level_1 (int64)

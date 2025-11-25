@@ -1,0 +1,10 @@
+REPORTE DE CALIDAD: Alumnos_Licenciatura_Historico_20251124_191432
+================================================================================
+
+Filas: 13
+Columnas: 3
+
+Columnas:
+  - periodo (object)
+  - recuento_alumnos_de_licenciatura (int64)
+  - fecha (int64)

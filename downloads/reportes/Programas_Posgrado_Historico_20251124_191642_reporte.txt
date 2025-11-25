@@ -1,0 +1,12 @@
+REPORTE DE CALIDAD: Programas_Posgrado_Historico_20251124_191642
+================================================================================
+
+Filas: 13
+Columnas: 5
+
+Columnas:
+  - periodo (object)
+  - especialidad (int64)
+  - maestra (int64)
+  - doctorado (int64)
+  - fecha (int64)
