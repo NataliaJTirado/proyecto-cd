@@ -10,4 +10,4 @@ Columnas:
   - en_formacin (int64)
   - en_consolidacin (int64)
   - consolidados (int64)
-  - fecha (int64)
+  - fecha (object)

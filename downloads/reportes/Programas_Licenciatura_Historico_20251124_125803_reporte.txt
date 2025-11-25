@@ -7,4 +7,4 @@ Columnas: 3
 Columnas:
   - periodo (object)
   - recuento_programas_educativos_de_licenciatura (int64)
-  - fecha (int64)
+  - fecha (object)

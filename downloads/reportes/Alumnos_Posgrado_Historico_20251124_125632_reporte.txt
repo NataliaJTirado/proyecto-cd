@@ -10,4 +10,4 @@ Columnas:
   - maestra (int64)
   - doctorado (int64)
   - uabc (int64)
-  - fecha (int64)
+  - fecha (object)

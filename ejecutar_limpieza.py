@@ -128,13 +128,10 @@ def procesar_dataset(ruta_archivo):
         # 4. Guardar datos limpios
         print("\n4. Guardando datos limpios...")
         archivo_salida_csv = f"{CARPETA_PROCESSED}/{nombre_base}_limpio.csv"
-        archivo_salida_excel = f"{CARPETA_PROCESSED}/{nombre_base}_limpio.xlsx"
-        
+
         df_limpio.to_csv(archivo_salida_csv, index=False, encoding='utf-8-sig')
-        df_limpio.to_excel(archivo_salida_excel, index=False)
-        
+
         print(f"   [OK] Guardado CSV: {archivo_salida_csv}")
-        print(f"   [OK] Guardado Excel: {archivo_salida_excel}")
         
         # 5. Guardar reporte
         archivo_reporte = f"{CARPETA_REPORTES}/{nombre_base}_reporte.txt"
@@ -236,12 +233,12 @@ def imprimir_resumen_procesamiento(resultados):
             
             print(f"\n   • {r['archivo']}")
             print(f"     Tipo: {r['tipo']}")
-            print(f"     Filas: {r['filas_originales']} → {r['filas_finales']}", end="")
+            print(f"     Filas: {r['filas_originales']} -> {r['filas_finales']}", end="")
             if reduccion_filas > 0:
                 print(f" (-{reduccion_filas})")
             else:
                 print()
-            print(f"     Columnas: {r['columnas_originales']} → {r['columnas_finales']}", end="")
+            print(f"     Columnas: {r['columnas_originales']} -> {r['columnas_finales']}", end="")
             if reduccion_cols > 0:
                 print(f" (-{reduccion_cols})")
             else:
