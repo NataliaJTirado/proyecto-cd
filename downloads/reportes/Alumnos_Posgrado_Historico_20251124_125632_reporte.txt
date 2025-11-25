@@ -1,0 +1,13 @@
+REPORTE DE CALIDAD: Alumnos_Posgrado_Historico_20251124_125632
+================================================================================
+
+Filas: 13
+Columnas: 6
+
+Columnas:
+  - periodo (object)
+  - especialidad (int64)
+  - maestra (int64)
+  - doctorado (int64)
+  - uabc (int64)
+  - fecha (int64)

@@ -1,0 +1,10 @@
+REPORTE DE CALIDAD: Programas_Licenciatura_Historico_20251124_125803
+================================================================================
+
+Filas: 13
+Columnas: 3
+
+Columnas:
+  - periodo (object)
+  - recuento_programas_educativos_de_licenciatura (int64)
+  - fecha (int64)

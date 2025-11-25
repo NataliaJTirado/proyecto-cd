@@ -5,18 +5,28 @@ from datetime import datetime
 import warnings
 warnings.filterwarnings('ignore')
 
-'''
-Funciones para limpieza de los datos
-'''
 
-def limpiar_nombres_columnas(df): #Limpia y estandariza los nombres de columnas
+# ============================================================================
+
+def limpiar_nombres_columnas(df):
     """
+    Limpia y estandariza los nombres de columnas
+    
     Args:
         df (pd.DataFrame): DataFrame con columnas a limpiar
+        
     Returns:
         pd.DataFrame: DataFrame con columnas limpias
     """
     df = df.copy()
+    
+    # Manejar MultiIndex primero
+    if isinstance(df.columns, pd.MultiIndex):
+        # Convertir MultiIndex a nombres simples
+        df.columns = ['_'.join(map(str, col)).strip() for col in df.columns.values]
+    
+    # Convertir todas las columnas a string
+    df.columns = df.columns.astype(str)
     
     # Convertir a minúsculas
     df.columns = df.columns.str.lower()
@@ -38,10 +48,14 @@ def limpiar_nombres_columnas(df): #Limpia y estandariza los nombres de columnas
     
     return df
 
-def detectar_y_convertir_tipos(df): #Detecta y convierte automáticamente los tipos de datos correctos
+
+def detectar_y_convertir_tipos(df):
     """
+    Detecta y convierte automáticamente los tipos de datos correctos
+    
     Args:
         df (pd.DataFrame): DataFrame a convertir
+        
     Returns:
         pd.DataFrame: DataFrame con tipos correctos
     """
@@ -65,11 +79,15 @@ def detectar_y_convertir_tipos(df): #Detecta y convierte automáticamente los ti
     
     return df
 
-def remover_filas_vacias(df, umbral=0.5): #Remueve filas que están mayormente vacías
-    """  
+
+def remover_filas_vacias(df, umbral=0.5):
+    """
+    Remueve filas que están mayormente vacías
+    
     Args:
         df (pd.DataFrame): DataFrame a limpiar
-        umbral (float): Proporción mínima de valores no nulos (0-1)  
+        umbral (float): Proporción mínima de valores no nulos (0-1)
+        
     Returns:
         pd.DataFrame: DataFrame sin filas vacías
     """
@@ -87,11 +105,15 @@ def remover_filas_vacias(df, umbral=0.5): #Remueve filas que están mayormente v
     
     return df_limpio
 
-def remover_columnas_vacias(df, umbral=0.5): #Remueve columnas que están mayormente vacías
+
+def remover_columnas_vacias(df, umbral=0.5):
     """
+    Remueve columnas que están mayormente vacías
+    
     Args:
         df (pd.DataFrame): DataFrame a limpiar
-        umbral (float): Proporción mínima de valores no nulos (0-1) 
+        umbral (float): Proporción mínima de valores no nulos (0-1)
+        
     Returns:
         pd.DataFrame: DataFrame sin columnas vacías
     """
@@ -111,13 +133,17 @@ def remover_columnas_vacias(df, umbral=0.5): #Remueve columnas que están mayorm
     
     return df_limpio
 
-#-----------------------------------------------------------------------------------------
 
-def limpiar_periodos(df, columna_periodo='periodo'): #Limpia y estandariza la columna de periodos (ej: 2018-2, 2019-1)
-    """  
+# ============================================================================
+
+def limpiar_periodos(df, columna_periodo='periodo'):
+    """
+    Limpia y estandariza la columna de periodos (ej: 2018-2, 2019-1)
+    
     Args:
         df (pd.DataFrame): DataFrame con columna de periodo
-        columna_periodo (str): Nombre de la columna de periodo  
+        columna_periodo (str): Nombre de la columna de periodo
+        
     Returns:
         pd.DataFrame: DataFrame con periodo estandarizado
     """
@@ -129,9 +155,9 @@ def limpiar_periodos(df, columna_periodo='periodo'): #Limpia y estandariza la co
         if posibles:
             columna_periodo = posibles[0]
         else:
-            print(f"No se encontró columna de periodo")
+            print(f"  No se encontró columna de periodo")
             return df
-        
+    
     # Convertir a string
     df[columna_periodo] = df[columna_periodo].astype(str)
     
@@ -148,22 +174,26 @@ def limpiar_periodos(df, columna_periodo='periodo'): #Limpia y estandariza la co
     
     if not validos.all():
         invalidos = df[~validos][columna_periodo].unique()
-        print(f"Periodos inválidos encontrados: {invalidos}")
+        print(f"  Periodos inválidos encontrados: {invalidos}")
     
     return df
 
-def agregar_columna_fecha(df, columna_periodo='periodo'): #Agrega columna de fecha basada en el periodo académico
+
+def agregar_columna_fecha(df, columna_periodo='periodo'):
     """
+    Agrega columna de fecha basada en el periodo académico
+    
     Args:
         df (pd.DataFrame): DataFrame con columna de periodo
-        columna_periodo (str): Nombre de la columna de periodo  
+        columna_periodo (str): Nombre de la columna de periodo
+        
     Returns:
         pd.DataFrame: DataFrame con columna 'fecha' agregada
     """
     df = df.copy()
     
     if columna_periodo not in df.columns:
-        print(f"Columna '{columna_periodo}' no encontrada")
+        print(f"  Columna '{columna_periodo}' no encontrada")
         return df
     
     def periodo_a_fecha(periodo):
@@ -180,11 +210,15 @@ def agregar_columna_fecha(df, columna_periodo='periodo'): #Agrega columna de fec
     
     return df
 
-def limpiar_valores_numericos(df, columnas=None): #Limpia valores numéricos removiendo símbolos y convirtiendo a float
+
+def limpiar_valores_numericos(df, columnas=None):
     """
+    Limpia valores numéricos removiendo símbolos y convirtiendo a float
+    
     Args:
         df (pd.DataFrame): DataFrame a limpiar
-        columnas (list): Lista de columnas a limpiar. Si None, limpia todas las numéricas  
+        columnas (list): Lista de columnas a limpiar. Si None, limpia todas las numéricas
+        
     Returns:
         pd.DataFrame: DataFrame con valores numéricos limpios
     """
@@ -207,22 +241,26 @@ def limpiar_valores_numericos(df, columnas=None): #Limpia valores numéricos rem
     
     return df
 
+
 def validar_rango_valores(df, columna, min_val=None, max_val=None, 
-                          accion='advertir'): #Valida que los valores estén dentro de un rango esperado
+                          accion='advertir'):
     """
+    Valida que los valores estén dentro de un rango esperado
+    
     Args:
         df (pd.DataFrame): DataFrame a validar
         columna (str): Nombre de la columna
         min_val (float): Valor mínimo esperado
         max_val (float): Valor máximo esperado
-        accion (str): 'advertir', 'remover', o 'corregir' 
+        accion (str): 'advertir', 'remover', o 'corregir'
+        
     Returns:
         pd.DataFrame: DataFrame validado
     """
     df = df.copy()
     
     if columna not in df.columns:
-        print(f"Columna '{columna}' no encontrada")
+        print(f"  Columna '{columna}' no encontrada")
         return df
     
     # Encontrar valores fuera de rango
@@ -238,7 +276,7 @@ def validar_rango_valores(df, columna, min_val=None, max_val=None,
         n_invalidos = fuera_rango.sum()
         
         if accion == 'advertir':
-            print(f"{n_invalidos} valores fuera de rango en '{columna}'")
+            print(f"  {n_invalidos} valores fuera de rango en '{columna}'")
             print(f"   Valores: {df[fuera_rango][columna].tolist()}")
         
         elif accion == 'remover':
@@ -254,11 +292,15 @@ def validar_rango_valores(df, columna, min_val=None, max_val=None,
     
     return df
 
-def detectar_duplicados(df, subset=None): #Detecta y reporta filas duplicadas
-    """    
+
+def detectar_duplicados(df, subset=None):
+    """
+    Detecta y reporta filas duplicadas
+    
     Args:
         df (pd.DataFrame): DataFrame a revisar
         subset (list): Columnas a considerar para duplicados. Si None, usa todas
+        
     Returns:
         pd.DataFrame: DataFrame con duplicados marcados
     """
@@ -268,19 +310,23 @@ def detectar_duplicados(df, subset=None): #Detecta y reporta filas duplicadas
     n_duplicados = duplicados.sum()
     
     if n_duplicados > 0:
-        print(f"{n_duplicados} filas duplicadas encontradas")
+        print(f"  {n_duplicados} filas duplicadas encontradas")
         df['es_duplicado'] = duplicados
     else:
         print("✓ No se encontraron duplicados")
     
     return df
 
-def remover_duplicados(df, subset=None, keep='first'): #Remueve filas duplicadas
+
+def remover_duplicados(df, subset=None, keep='first'):
     """
+    Remueve filas duplicadas
+    
     Args:
         df (pd.DataFrame): DataFrame a limpiar
         subset (list): Columnas a considerar. Si None, usa todas
         keep (str): 'first', 'last', o False
+        
     Returns:
         pd.DataFrame: DataFrame sin duplicados
     """
@@ -294,15 +340,20 @@ def remover_duplicados(df, subset=None, keep='first'): #Remueve filas duplicadas
     
     return df
 
-#-----------------------------------------------------------------------------------------
 
-def limpiar_alumnos_historico(df): #Limpieza específica para datasets de alumnos históricos
+# ============================================================================
+
+def limpiar_alumnos_historico(df):
     """
+    Limpieza específica para datasets de alumnos históricos
+    
     Args:
         df (pd.DataFrame): DataFrame de alumnos históricos
+        
     Returns:
         pd.DataFrame: DataFrame limpio
     """
+    print("\n📊 Limpiando datos de alumnos...")
     
     # 1. Limpiar nombres de columnas
     df = limpiar_nombres_columnas(df)
@@ -336,14 +387,18 @@ def limpiar_alumnos_historico(df): #Limpieza específica para datasets de alumno
     
     return df
 
-def limpiar_personal_historico(df): #Limpieza específica para datasets de personal académico histórico
+
+def limpiar_personal_historico(df):
     """
+    Limpieza específica para datasets de personal académico histórico
+    
     Args:
-        df (pd.DataFrame): DataFrame de personal histórico 
+        df (pd.DataFrame): DataFrame de personal histórico
+        
     Returns:
         pd.DataFrame: DataFrame limpio
     """
-    print("\nLimpiando datos de personal académico...")
+    print("\n👨‍🏫 Limpiando datos de personal académico...")
     
     # Aplicar limpieza similar a alumnos
     df = limpiar_nombres_columnas(df)
@@ -366,30 +421,46 @@ def limpiar_personal_historico(df): #Limpieza específica para datasets de perso
     
     return df
 
-def limpiar_cuerpos_academicos(df): #Limpieza específica para cuerpos académicos
+
+def limpiar_cuerpos_academicos(df):
     """
+    Limpieza específica para cuerpos académicos
+    
     Args:
         df (pd.DataFrame): DataFrame de cuerpos académicos
+        
     Returns:
         pd.DataFrame: DataFrame limpio
     """
-    print("\nLimpiando datos de cuerpos académicos...")
+    print("\n🔬 Limpiando datos de cuerpos académicos...")
     
     df = limpiar_nombres_columnas(df)
-    df = limpiar_periodos(df)
-    df = agregar_columna_fecha(df)
+    
+    # Solo limpiar periodos si existe la columna
+    columnas_lower = [str(col).lower() for col in df.columns]
+    tiene_periodo = any('periodo' in col for col in columnas_lower)
+    
+    if tiene_periodo:
+        df = limpiar_periodos(df)
+        df = agregar_columna_fecha(df)
+        df = remover_duplicados(df, subset=['periodo'])
+        df = df.sort_values('periodo').reset_index(drop=True)
+    else:
+        df = remover_duplicados(df)
+    
     df = detectar_y_convertir_tipos(df)
     df = remover_filas_vacias(df)
     df = remover_columnas_vacias(df)
-    df = remover_duplicados(df, subset=['periodo'])
-    df = df.sort_values('periodo').reset_index(drop=True)
     
     print("✓ Limpieza completada\n")
     
     return df
 
-def limpiar_relacion_alumnos_profesor(df): # Limpieza específica para relación alumnos-profesor por unidad
-    """  
+
+def limpiar_relacion_alumnos_profesor(df):
+    """
+    Limpieza específica para relación alumnos-profesor por unidad
+    
     Args:
         df (pd.DataFrame): DataFrame de relación alumnos-profesor
         
@@ -414,12 +485,55 @@ def limpiar_relacion_alumnos_profesor(df): # Limpieza específica para relación
     
     return df
 
-def limpiar_dataset(df, tipo_dataset): #Función principal que aplica la limpieza apropiada según el tipo de dataset
+
+def limpiar_dataset_sin_periodo(df):
     """
+    Limpieza para datasets sin columna de periodo
+    (Datos filtrados por unidad académica, área de conocimiento, etc.)
+    
+    Args:
+        df (pd.DataFrame): DataFrame sin periodo
+        
+    Returns:
+        pd.DataFrame: DataFrame limpio
+    """
+    print("\n Limpiando dataset sin periodo (datos agregados)...")
+    
+    # Manejar MultiIndex en columnas si existe
+    if isinstance(df.columns, pd.MultiIndex):
+        print("   → Aplanando MultiIndex en columnas...")
+        # Convertir MultiIndex a nombres simples
+        df.columns = ['_'.join(map(str, col)).strip() for col in df.columns.values]
+    
+    df = limpiar_nombres_columnas(df)
+    df = detectar_y_convertir_tipos(df)
+    df = remover_filas_vacias(df, umbral=0.3)  # Más permisivo
+    df = remover_columnas_vacias(df, umbral=0.3)  # Más permisivo
+    
+    # Validar valores numéricos (más permisivo)
+    columnas_numericas = df.select_dtypes(include=[np.number]).columns
+    for col in columnas_numericas:
+        # Advertir pero no remover
+        df = validar_rango_valores(df, col, min_val=0, accion='advertir')
+    
+    df = remover_duplicados(df)
+    
+    print("✓ Limpieza completada\n")
+    
+    return df
+
+
+# ============================================================================
+
+def limpiar_dataset(df, tipo_dataset):
+    """
+    Función principal que aplica la limpieza apropiada según el tipo de dataset
+    
     Args:
         df (pd.DataFrame): DataFrame a limpiar
         tipo_dataset (str): Tipo de dataset ('alumnos', 'personal', 'cuerpos', 
-                           'relacion', 'programas')  
+                           'relacion', 'programas')
+        
     Returns:
         pd.DataFrame: DataFrame limpio
     """
@@ -429,6 +543,32 @@ def limpiar_dataset(df, tipo_dataset): #Función principal que aplica la limpiez
     print(f"Filas originales: {len(df)}")
     print(f"Columnas originales: {len(df.columns)}")
     
+    # Verificar si tiene MultiIndex en columnas
+    if isinstance(df.columns, pd.MultiIndex):
+        print("  Dataset tiene MultiIndex, usando limpieza especial...")
+        df_limpio = limpiar_dataset_sin_periodo(df)
+        print(f"\nFilas finales: {len(df_limpio)}")
+        print(f"Columnas finales: {len(df_limpio.columns)}")
+        print(f"{'='*60}\n")
+        return df_limpio
+    
+    # Verificar si tiene columna de periodo
+    tiene_periodo = False
+    if len(df.columns) > 0:
+        # Buscar columna que contenga 'periodo'
+        columnas_lower = [str(col).lower() for col in df.columns]
+        tiene_periodo = any('periodo' in col for col in columnas_lower)
+    
+    # Si no tiene periodo, es un dataset agregado (por unidad, área, etc.)
+    if not tiene_periodo and tipo_dataset in ['cuerpos', 'relacion', 'programas']:
+        print("  Dataset sin columna 'periodo', usando limpieza para datos agregados...")
+        df_limpio = limpiar_dataset_sin_periodo(df)
+        print(f"\nFilas finales: {len(df_limpio)}")
+        print(f"Columnas finales: {len(df_limpio.columns)}")
+        print(f"{'='*60}\n")
+        return df_limpio
+    
+    # Limpieza normal según tipo
     if tipo_dataset in ['alumnos', 'alumnos_licenciatura', 'alumnos_posgrado']:
         df_limpio = limpiar_alumnos_historico(df)
     
@@ -436,18 +576,32 @@ def limpiar_dataset(df, tipo_dataset): #Función principal que aplica la limpiez
         df_limpio = limpiar_personal_historico(df)
     
     elif tipo_dataset == 'cuerpos':
-        df_limpio = limpiar_cuerpos_academicos(df)
+        if tiene_periodo:
+            df_limpio = limpiar_cuerpos_academicos(df)
+        else:
+            df_limpio = limpiar_dataset_sin_periodo(df)
     
     elif tipo_dataset == 'relacion':
-        df_limpio = limpiar_relacion_alumnos_profesor(df)
+        if tiene_periodo:
+            df_limpio = limpiar_alumnos_historico(df)  # Similar a alumnos
+        else:
+            df_limpio = limpiar_dataset_sin_periodo(df)
     
     elif tipo_dataset in ['programas', 'programas_licenciatura', 'programas_posgrado']:
-        df_limpio = limpiar_alumnos_historico(df)  # Similar a alumnos
+        if tiene_periodo:
+            df_limpio = limpiar_alumnos_historico(df)  # Similar a alumnos
+        else:
+            df_limpio = limpiar_dataset_sin_periodo(df)
     
     else:
-        print(f"Tipo de dataset '{tipo_dataset}' no reconocido")
+        print(f"  Tipo de dataset '{tipo_dataset}' no reconocido")
         print("Aplicando limpieza genérica...")
         df_limpio = df.copy()
+        
+        # Manejar MultiIndex si existe
+        if isinstance(df_limpio.columns, pd.MultiIndex):
+            df_limpio.columns = ['_'.join(map(str, col)).strip() for col in df_limpio.columns.values]
+        
         df_limpio = limpiar_nombres_columnas(df_limpio)
         df_limpio = detectar_y_convertir_tipos(df_limpio)
         df_limpio = remover_filas_vacias(df_limpio)
@@ -459,11 +613,16 @@ def limpiar_dataset(df, tipo_dataset): #Función principal que aplica la limpiez
     
     return df_limpio
 
-def generar_reporte_calidad(df, nombre_dataset): #Genera un reporte de calidad de datos
+# ============================================================================
+
+def generar_reporte_calidad(df, nombre_dataset):
     """
+    Genera un reporte de calidad de datos
+    
     Args:
         df (pd.DataFrame): DataFrame a analizar
         nombre_dataset (str): Nombre del dataset
+        
     Returns:
         dict: Diccionario con métricas de calidad
     """
@@ -486,8 +645,11 @@ def generar_reporte_calidad(df, nombre_dataset): #Genera un reporte de calidad d
     
     return reporte
 
-def imprimir_reporte_calidad(reporte): #Imprime un reporte de calidad de datos de forma legible
+
+def imprimir_reporte_calidad(reporte):
     """
+    Imprime un reporte de calidad de datos de forma legible
+    
     Args:
         reporte (dict): Diccionario con métricas de calidad
     """
@@ -495,18 +657,18 @@ def imprimir_reporte_calidad(reporte): #Imprime un reporte de calidad de datos d
     print(f"REPORTE DE CALIDAD: {reporte['nombre_dataset']}")
     print("="*60)
     
-    print(f"\nDIMENSIONES:")
+    print(f"\ DIMENSIONES:")
     print(f"   Filas: {reporte['n_filas']:,}")
     print(f"   Columnas: {reporte['n_columnas']}")
     
-    print(f"\nCOLUMNAS:")
+    print(f"\n COLUMNAS:")
     for col in reporte['columnas']:
         tipo = reporte['tipos_datos'][col]
         nulos = reporte['valores_nulos'][col]
         pct_nulos = reporte['porcentaje_nulos'][col]
         print(f"   • {col} ({tipo})")
         if nulos > 0:
-            print(f"     {nulos} nulos ({pct_nulos:.1f}%)")
+            print(f"       {nulos} nulos ({pct_nulos:.1f}%)")
     
     if reporte['filas_duplicadas'] > 0:
         print(f"\n  DUPLICADOS: {reporte['filas_duplicadas']} filas")

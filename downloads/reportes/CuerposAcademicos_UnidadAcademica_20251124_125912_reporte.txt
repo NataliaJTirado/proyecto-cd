@@ -1,0 +1,13 @@
+REPORTE DE CALIDAD: CuerposAcademicos_UnidadAcademica_20251124_125912
+================================================================================
+
+Filas: 46
+Columnas: 6
+
+Columnas:
+  - campus (object)
+  - unidad_acadmica (object)
+  - uabc (int64)
+  - formacion (int64)
+  - consolidacion (int64)
+  - consolidado (int64)

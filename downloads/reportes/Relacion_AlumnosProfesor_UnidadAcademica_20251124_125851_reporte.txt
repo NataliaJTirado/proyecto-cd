@@ -1,0 +1,11 @@
+REPORTE DE CALIDAD: Relacion_AlumnosProfesor_UnidadAcademica_20251124_125851
+================================================================================
+
+Filas: 52
+Columnas: 4
+
+Columnas:
+  - campus_campus (object)
+  - unidad_acadmica_unidad_acadmica (object)
+  - relacin_alumno_licenciatura_personal_acadmico_unnamed_2_level_1 (float64)
+  - relacin_alumno_posgrado_personal_acadmico_unnamed_3_level_1 (float64)
